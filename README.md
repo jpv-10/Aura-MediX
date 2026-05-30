@@ -236,3 +236,5 @@ This platform is for **educational and demonstration purposes only**. AI predict
 ---
 
 *Built with ❤️ — MEDI AI NEXUS v2.1.0 | The Future of Healthcare Intelligence*
+#   A u r a - M e d i X  
+ 
