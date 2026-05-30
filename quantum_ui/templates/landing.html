@@ -1,0 +1,478 @@
+{% extends "base.html" %}
+{% block title %}Aura MediX — The Future of Clinical AI{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}" />
+{% endblock %}
+
+{% block body %}
+
+<!-- ══ SECTION 1 — NAVBAR ════════════════════════════════════════════════ -->
+<nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+
+  <a href="{{ url_for('medix_portal.landing') }}" class="nav-logo" aria-label="Aura MediX home">
+    <div class="nav-logo-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="12" cy="12" r="3" fill="#fff"/>
+      </svg>
+    </div>
+    <span class="logo-text">Aura <span class="logo-accent">MediX</span></span>
+  </a>
+
+  <div class="nav-links" role="list">
+    <a href="#features"     class="nav-link" role="listitem">Features</a>
+    <a href="{{ url_for('medix_portal.ai_doctor') }}" class="nav-link" role="listitem">AI Doctor</a>
+    <a href="#how-it-works" class="nav-link" role="listitem">How it works</a>
+    <a href="#testimonials" class="nav-link" role="listitem">Reviews</a>
+  </div>
+
+  <div class="nav-actions">
+    <a href="{{ url_for('medix_portal.login') }}" class="btn btn-ghost btn-sm">Sign In</a>
+    <a href="{{ url_for('medix_portal.register') }}" class="btn btn-primary btn-sm">
+      Get Started
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- ══ SECTION 2 — HERO ══════════════════════════════════════════════════ -->
+<section class="hero" aria-label="Hero">
+
+  <!-- CSS-only gradient orbs — no canvas, no JS -->
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+
+  <!-- Left column -->
+  <div class="hero-left">
+    <div class="status-badge" role="status" aria-live="polite">
+      <span class="dot" aria-hidden="true"></span>
+      AI Models &nbsp;·&nbsp; Live &nbsp;·&nbsp; v4.0
+    </div>
+
+    <h1 class="hero-title">
+      The Future of<br>
+      <span class="gradient-text">Clinical AI</span><br>
+      Begins Here.
+    </h1>
+
+    <p class="hero-subtitle">
+      Intelligent disease prediction, real-time vitals, 24/7 AI doctor consultations,
+      and emergency triage — unified in one elite healthcare platform.
+    </p>
+
+    <div class="hero-actions">
+      <a href="{{ url_for('medix_portal.register') }}" class="btn btn-primary btn-lg">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/></svg>
+        Get Started Free
+      </a>
+      <a href="{{ url_for('medix_portal.guest_session') }}" class="btn btn-secondary btn-lg">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+        Try AI Doctor
+      </a>
+    </div>
+
+    <p class="trust-line">
+      ✓ No credit card &nbsp;·&nbsp; ✓ HIPAA compliant &nbsp;·&nbsp; ✓ Free 14-day trial
+    </p>
+  </div>
+
+  <!-- Right column — floating metric cards -->
+  <div class="hero-right" aria-hidden="true">
+
+    <div class="float-card card-1">
+      <div class="card-icon">♥</div>
+      <div>
+        <div class="card-title">HEART RATE</div>
+        <div class="card-value">72 <span>bpm</span></div>
+        <div class="card-status">● Continuous feed active</div>
+      </div>
+    </div>
+
+    <div class="float-card card-2">
+      <div class="card-icon risk-icon">⬡</div>
+      <div>
+        <div class="card-title">DIABETES RISK AI</div>
+        <div class="card-value green">Low Risk</div>
+        <div class="card-sub">Gradient Boosting · 97.2% conf.</div>
+      </div>
+    </div>
+
+    <div class="float-card card-3">
+      <div class="card-icon teal-icon">◉</div>
+      <div>
+        <div class="card-title">WELLNESS SCORE</div>
+        <div class="card-value">87<span>%</span></div>
+        <div class="card-sub">Optimal neurological status</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ SECTION 3 — STATS BAR ═════════════════════════════════════════════ -->
+<section class="stats-bar" aria-label="Platform statistics">
+  <div class="stat-cell">
+    <div class="stat-number" data-count="50000+">50,000+</div>
+    <div class="stat-label">Patients Served</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-number" data-count="97.4%">97.4%</div>
+    <div class="stat-label">AI Accuracy</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-number" data-count="2">&lt; 2s</div>
+    <div class="stat-label">Diagnosis Speed</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-number" data-count="24">24/7</div>
+    <div class="stat-label">AI Availability</div>
+  </div>
+</section>
+
+<!-- ══ SECTION 4 — FEATURES GRID ════════════════════════════════════════ -->
+<section class="features" id="features" aria-label="Platform features">
+  <div class="section-header">
+    <p class="section-eyebrow">Platform Capabilities</p>
+    <h2 class="section-title">Powered by Clinical Intelligence</h2>
+    <p class="section-subtitle">
+      Every module is built on peer-reviewed medical datasets and validated ML models,
+      designed to augment clinical decision-making at every level.
+    </p>
+  </div>
+
+  <div class="features-grid">
+
+    <div class="feature-card">
+      <div class="feature-icon fi-purple">🧠</div>
+      <h3 class="feature-title">AI Disease Prediction</h3>
+      <p class="feature-desc">Multi-model ML ensemble with 97%+ accuracy across 15+ conditions including diabetes, heart disease, and hypertension.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon fi-pink">💬</div>
+      <h3 class="feature-title">24/7 AI Doctor</h3>
+      <p class="feature-desc">Instant consultations powered by advanced clinical NLP. AURA understands symptoms, context, and medical history.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon fi-blue">🔬</div>
+      <h3 class="feature-title">Symptom Analysis</h3>
+      <p class="feature-desc">Step-by-step intelligent triage with visual body mapping, severity scoring, and urgency classification.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon fi-green">📊</div>
+      <h3 class="feature-title">Health Analytics</h3>
+      <p class="feature-desc">Real-time dashboards with trend analysis, risk scoring, and predictive health trajectory modeling.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon fi-red">🚨</div>
+      <h3 class="feature-title">Emergency Triage</h3>
+      <p class="feature-desc">One-tap emergency response with nearest hospital routing, CPR guidance, and SOS alert broadcasting.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon fi-amber">💊</div>
+      <h3 class="feature-title">Medicine Advisor</h3>
+      <p class="feature-desc">Personalized medication recommendations with drug interaction checking and contraindication alerts.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon fi-teal">🏥</div>
+      <h3 class="feature-title">Hospital Locator</h3>
+      <p class="feature-desc">Live hospital availability with specialty matching, distance routing, and real-time capacity data.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon fi-indigo">📋</div>
+      <h3 class="feature-title">Medical Reports</h3>
+      <p class="feature-desc">AI-generated clinical summaries with structured findings, export to PDF, and EHR-ready formatting.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ SECTION 5 — HOW IT WORKS ══════════════════════════════════════════ -->
+<section class="how-it-works" id="how-it-works" aria-label="How it works">
+  <div class="section-header">
+    <p class="section-eyebrow">Simple Process</p>
+    <h2 class="section-title">From Symptom to Solution in Minutes</h2>
+    <p class="section-subtitle">
+      No complex setup. No medical jargon. Just clear, actionable health intelligence.
+    </p>
+  </div>
+
+  <div class="steps-row">
+    <div class="step">
+      <span class="step-number">01</span>
+      <h3 class="step-title">Describe Your Symptoms</h3>
+      <p class="step-desc">Type or speak your symptoms naturally. Our NLP engine understands medical context and everyday language equally well.</p>
+    </div>
+    <div class="step">
+      <span class="step-number">02</span>
+      <h3 class="step-title">AI Analyzes &amp; Predicts</h3>
+      <p class="step-desc">Multiple ML models cross-reference your inputs against clinical datasets, vitals history, and risk factors simultaneously.</p>
+    </div>
+    <div class="step">
+      <span class="step-number">03</span>
+      <h3 class="step-title">Get Clinical Insights</h3>
+      <p class="step-desc">Receive a structured assessment with probable conditions, confidence scores, recommended actions, and specialist referrals.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 6 — TESTIMONIALS ═════════════════════════════════════════ -->
+<section class="testimonials" id="testimonials" aria-label="Testimonials">
+  <div class="section-header">
+    <p class="section-eyebrow">Social Proof</p>
+    <h2 class="section-title">Trusted by Healthcare Professionals</h2>
+    <p class="section-subtitle">
+      From solo practitioners to hospital networks — Aura MediX is reshaping clinical workflows.
+    </p>
+  </div>
+
+  <div class="testimonials-scroll" role="list">
+
+    <article class="testimonial-card" role="listitem">
+      <div class="stars" aria-label="5 stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="testimonial-quote">"The AI diagnostic accuracy has genuinely changed how I approach preliminary assessments. It catches patterns I'd spend 20 minutes identifying manually."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar" aria-hidden="true">SC</div>
+        <div>
+          <div class="author-name">Dr. Sarah Chen</div>
+          <div class="author-role">Cardiologist, Stanford Medical</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="testimonial-card" role="listitem">
+      <div class="stars" aria-label="5 stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="testimonial-quote">"Emergency triage response cut our critical patient routing time by 40%. The hospital locator integration alone justified the entire deployment."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar" aria-hidden="true">JO</div>
+        <div>
+          <div class="author-name">Dr. James Okafor</div>
+          <div class="author-role">ER Physician, Johns Hopkins</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="testimonial-card" role="listitem">
+      <div class="stars" aria-label="5 stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="testimonial-quote">"Aura MediX integrated into our workflow in under a week. The ROI was immediate — patient throughput increased 28% in the first month."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar" aria-hidden="true">PS</div>
+        <div>
+          <div class="author-name">Dr. Priya Sharma</div>
+          <div class="author-role">Hospital Director, Apollo Group</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="testimonial-card" role="listitem">
+      <div class="stars" aria-label="5 stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="testimonial-quote">"The symptom analysis catches patterns I might have spent hours identifying manually. It's like having a brilliant resident available around the clock."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar" aria-hidden="true">MT</div>
+        <div>
+          <div class="author-name">Dr. Michael Torres</div>
+          <div class="author-role">Internist, Mayo Clinic</div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ══ SECTION 7 — CTA BANNER ════════════════════════════════════════════ -->
+<section class="cta-section" aria-label="Call to action">
+  <div class="cta-banner">
+    <h2 class="cta-title">Ready to Transform Patient Care?</h2>
+    <p class="cta-subtitle">Join 50,000+ healthcare professionals using Aura MediX every day.</p>
+
+    <div class="cta-actions">
+      <a href="{{ url_for('medix_portal.register') }}" class="btn btn-primary btn-lg">
+        Start Free Trial
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </a>
+      <a href="{{ url_for('medix_portal.guest_session') }}" class="btn btn-ghost btn-lg">
+        Book a Demo
+      </a>
+    </div>
+
+    <div class="trust-badges">
+      <div class="trust-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        HIPAA Compliant
+      </div>
+      <div class="trust-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        SOC 2 Type II
+      </div>
+      <div class="trust-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        99.9% Uptime SLA
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 8 — FOOTER ════════════════════════════════════════════════ -->
+<footer class="footer" aria-label="Site footer">
+  <div class="footer-grid">
+
+    <!-- Col 1: Brand -->
+    <div>
+      <a href="{{ url_for('medix_portal.landing') }}" class="nav-logo" style="display:inline-flex">
+        <div class="nav-logo-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="3" fill="#fff"/></svg>
+        </div>
+        <span class="logo-text">Aura <span class="logo-accent">MediX</span></span>
+      </a>
+      <p class="footer-brand-desc">AI-powered healthcare intelligence platform. Predict, prevent, and manage health outcomes with clinical-grade AI.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-link" aria-label="Twitter/X">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="#" class="social-link" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="#" class="social-link" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Col 2: Product -->
+    <div>
+      <div class="footer-col-title">Product</div>
+      <a href="#features"    class="footer-link">Features</a>
+      <a href="{{ url_for('medix_portal.guest_session') }}" class="footer-link">AI Demo</a>
+      <a href="{{ url_for('medix_portal.health_analytics') }}" class="footer-link">Analytics</a>
+      <a href="{{ url_for('medix_portal.ai_doctor') }}" class="footer-link">AI Doctor</a>
+    </div>
+
+    <!-- Col 3: Company -->
+    <div>
+      <div class="footer-col-title">Company</div>
+      <a href="#" class="footer-link">About</a>
+      <a href="#" class="footer-link">Careers</a>
+      <a href="#" class="footer-link">Blog</a>
+      <a href="#" class="footer-link">Press</a>
+    </div>
+
+    <!-- Col 4: Legal -->
+    <div>
+      <div class="footer-col-title">Legal</div>
+      <a href="#" class="footer-link">Privacy Policy</a>
+      <a href="#" class="footer-link">Terms of Service</a>
+      <a href="#" class="footer-link">HIPAA Compliance</a>
+      <a href="#" class="footer-link">Security</a>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Aura MediX. All rights reserved.</span>
+    <span class="footer-copy">Made for healthcare professionals worldwide.</span>
+  </div>
+</footer>
+
+<!-- ══ SECTION 9 — PAGE ENTRANCE ANIMATIONS ══════════════════════════════ -->
+{% endblock %}
+
+{% block scripts %}
+<script>
+/* ── Navbar scroll effect ─────────────────────────────────────────────── */
+(function () {
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  }, { passive: true });
+})();
+
+/* ── Scroll-triggered entrance animations ─────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function () {
+  const observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry, i) {
+      if (entry.isIntersecting) {
+        setTimeout(function () {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }, i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.feature-card, .stat-cell, .step, .testimonial-card').forEach(function (el) {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 400ms ease, transform 400ms cubic-bezier(0.16,1,0.3,1)';
+    observer.observe(el);
+  });
+});
+
+/* ── Animated number counters ─────────────────────────────────────────── */
+function animateCounter(el) {
+  var raw    = el.getAttribute('data-count');
+  var isPlus = raw.indexOf('+') !== -1;
+  var isPct  = raw.indexOf('%') !== -1;
+  var isLess = raw.indexOf('<') !== -1;
+  var isSlash= raw.indexOf('/') !== -1;
+  var num    = parseFloat(raw.replace(/[^0-9.]/g, ''));
+  var start  = null;
+  var duration = 1200;
+
+  function step(timestamp) {
+    if (!start) start = timestamp;
+    var progress = Math.min((timestamp - start) / duration, 1);
+    var eased    = 1 - Math.pow(1 - progress, 3);
+    var current  = (eased * num).toFixed(isPct ? 1 : 0);
+    var display  = (isLess ? '< ' : '') + current + (isPlus ? '+' : '') + (isPct ? '%' : '') + (isSlash ? '/7' : '');
+    el.textContent = display;
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+var counterObserver = new IntersectionObserver(function (entries) {
+  entries.forEach(function (entry) {
+    if (entry.isIntersecting) {
+      animateCounter(entry.target);
+      counterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('[data-count]').forEach(function (el) {
+  counterObserver.observe(el);
+});
+
+/* ── Smooth anchor scroll ─────────────────────────────────────────────── */
+document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+  anchor.addEventListener('click', function (e) {
+    var target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0D0B14" />
+  <meta name="csrf-token" content="{{ csrf_token() if csrf_token is defined else '' }}" />
+  <title>{% block title %}Aura MediX — AI Wellness Platform{% endblock %}</title>
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Satoshi (headings) -->
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,600,500,400&display=swap" rel="stylesheet" />
+  <!-- Inter + JetBrains Mono -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Design System — load order: tokens → layout → components → animations -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/design-system.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}" />
+
+  {% block head %}{% endblock %}
+</head>
+<body class="app-body">
+
+  <!-- ══ PREMIUM AMBIENT BACKGROUND SYSTEM ══════════════════════════════ -->
+
+  <!-- Top edge glow line — subtle gradient shimmer across page top -->
+  <div class="top-glow-line" aria-hidden="true"></div>
+
+  <!-- Particle canvas — behind everything, GPU-composited -->
+  <canvas id="app-particles" aria-hidden="true"></canvas>
+
+  <!-- Mesh background: base fog + animated orbs + grid -->
+  <div class="mesh-bg" aria-hidden="true">
+    <div class="mesh-orb mo-1"></div>
+    <div class="mesh-orb mo-2"></div>
+    <div class="mesh-orb mo-3"></div>
+    <div class="mesh-orb mo-4"></div>
+    <div class="mesh-grid"></div>
+  </div>
+
+  <!-- Depth vignette — darkens corners for premium immersion -->
+  <div class="mesh-vignette" aria-hidden="true"></div>
+
+  <!-- ══ PAGE CONTENT ════════════════════════════════════════════════════ -->
+  {% block body %}
+    {% block content %}{% endblock %}
+  {% endblock %}
+
+  <!-- Toast container -->
+  <div id="toast-container" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none" aria-live="polite"></div>
+
+  <!-- Core JS -->
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+  <!-- Premium particle system (replaces old particles.js) -->
+  <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

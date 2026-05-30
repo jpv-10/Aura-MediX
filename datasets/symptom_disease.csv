@@ -1,0 +1,501 @@
+symptoms,symptom_count,disease,severity
+"back pain, blurred vision",2,Common Cold,mild
+"swelling, frequent urination, excessive thirst, abdominal pain",4,GERD,mild
+"frequent urination, shortness of breath",2,Hypertension,severe
+"abdominal pain, joint pain, insomnia, swelling",4,GERD,moderate
+"dizziness, chest pain",2,Migraine,moderate
+"sore throat, abdominal pain, cough, anxiety, numbness",5,Anemia,mild
+"insomnia, fever, cough, anxiety, sweating",5,Anemia,mild
+"insomnia, palpitations",2,Cardiac Arrhythmia,mild
+"chest pain, vomiting, anxiety, excessive thirst",4,Hypothyroidism,mild
+"nausea, insomnia, chest pain, joint pain",4,Hypothyroidism,mild
+"headache, vomiting",2,Common Cold,mild
+"headache, sweating, abdominal pain, nausea, sore throat",5,Hypertension,mild
+"anxiety, headache, palpitations",3,Anemia,mild
+"headache, nausea, back pain",3,GERD,severe
+"nausea, excessive thirst, numbness, joint pain, fatigue",5,GERD,mild
+"insomnia, blurred vision, frequent urination, palpitations, headache",5,Common Cold,severe
+"anxiety, weight loss, insomnia, fever, dizziness",5,Anxiety Disorder,mild
+"insomnia, anxiety, headache, fatigue, dizziness",5,GERD,mild
+"chest pain, anxiety, insomnia",3,Cardiac Arrhythmia,moderate
+"joint pain, rash, fever, vomiting",4,Hypothyroidism,mild
+"anxiety, sweating, numbness",3,Hypertension,moderate
+"fever, swelling",2,Common Cold,moderate
+"back pain, headache",2,Anemia,severe
+"chest pain, anxiety, fever, weight loss, frequent urination",5,Diabetes,moderate
+"dizziness, back pain, sore throat, numbness",4,Hypothyroidism,moderate
+"rash, headache, palpitations, weight loss",4,Anxiety Disorder,mild
+"sweating, rash, frequent urination, fatigue, dizziness",5,GERD,severe
+"vomiting, sweating, numbness, fatigue, weight loss",5,Common Cold,mild
+"blurred vision, numbness, rash, vomiting",4,Diabetes,mild
+"anxiety, palpitations, frequent urination, insomnia",4,Diabetes,mild
+"nausea, frequent urination",2,Common Cold,severe
+"back pain, palpitations",2,Anemia,mild
+"numbness, fatigue",2,GERD,mild
+"insomnia, frequent urination, dizziness, vomiting, abdominal pain",5,Diabetes,mild
+"weight loss, fatigue",2,Hypertension,severe
+"chest pain, frequent urination",2,Anemia,mild
+"back pain, shortness of breath, swelling, excessive thirst",4,Anemia,moderate
+"palpitations, sore throat",2,Diabetes,moderate
+"blurred vision, fever, chest pain, weight loss",4,Diabetes,severe
+"fever, abdominal pain, dizziness, palpitations, fatigue",5,Hypertension,mild
+"excessive thirst, palpitations, nausea, insomnia",4,GERD,mild
+"weight loss, palpitations, fever, frequent urination",4,Cardiac Arrhythmia,moderate
+"sweating, blurred vision, weight loss, numbness, vomiting",5,Hypertension,mild
+"excessive thirst, chest pain",2,Anxiety Disorder,moderate
+"dizziness, nausea, fever, shortness of breath, headache",5,Anemia,mild
+"sweating, excessive thirst, insomnia, vomiting",4,Migraine,moderate
+"chest pain, sweating, blurred vision, abdominal pain, cough",5,Anxiety Disorder,moderate
+"dizziness, insomnia, swelling, frequent urination, anxiety",5,Diabetes,mild
+"abdominal pain, palpitations, frequent urination, weight loss",4,GERD,mild
+"back pain, palpitations, joint pain",3,Migraine,mild
+"headache, insomnia, numbness, cough, sweating",5,Influenza,severe
+"frequent urination, anxiety",2,Migraine,severe
+"vomiting, frequent urination",2,Cardiac Arrhythmia,mild
+"swelling, anxiety, chest pain, joint pain, fever",5,Migraine,mild
+"excessive thirst, joint pain, dizziness",3,Migraine,mild
+"palpitations, frequent urination",2,Anemia,mild
+"vomiting, blurred vision",2,Diabetes,moderate
+"shortness of breath, insomnia",2,Influenza,moderate
+"numbness, fever, insomnia",3,Migraine,severe
+"dizziness, insomnia, rash, nausea",4,Cardiac Arrhythmia,mild
+"chest pain, shortness of breath, cough",3,Diabetes,mild
+"palpitations, insomnia, weight loss",3,Hypothyroidism,moderate
+"headache, shortness of breath",2,Anxiety Disorder,mild
+"excessive thirst, headache, anxiety, joint pain",4,Anxiety Disorder,moderate
+"shortness of breath, joint pain",2,Influenza,mild
+"weight loss, fever, swelling, anxiety",4,Cardiac Arrhythmia,mild
+"back pain, shortness of breath",2,Anemia,mild
+"sore throat, abdominal pain, swelling, shortness of breath, vomiting",5,Common Cold,mild
+"anxiety, abdominal pain, dizziness",3,Migraine,mild
+"fatigue, nausea, insomnia, blurred vision, frequent urination",5,GERD,mild
+"anxiety, abdominal pain, cough, palpitations, shortness of breath",5,Hypothyroidism,mild
+"numbness, excessive thirst",2,Cardiac Arrhythmia,mild
+"numbness, back pain, dizziness, excessive thirst, joint pain",5,GERD,moderate
+"insomnia, dizziness, numbness, anxiety, joint pain",5,Migraine,moderate
+"excessive thirst, sweating",2,Anxiety Disorder,mild
+"joint pain, frequent urination, fatigue, back pain, sore throat",5,Cardiac Arrhythmia,moderate
+"insomnia, weight loss, abdominal pain, palpitations, shortness of breath",5,Hypothyroidism,moderate
+"anxiety, nausea, blurred vision, fatigue",4,Common Cold,severe
+"chest pain, weight loss, back pain",3,Hypertension,mild
+"insomnia, anxiety, swelling, shortness of breath, joint pain",5,Diabetes,mild
+"abdominal pain, shortness of breath, sore throat",3,Migraine,severe
+"fever, abdominal pain",2,Anxiety Disorder,moderate
+"rash, palpitations, frequent urination",3,Migraine,mild
+"fever, sweating, chest pain, sore throat, joint pain",5,Diabetes,severe
+"rash, frequent urination, weight loss",3,Diabetes,mild
+"anxiety, palpitations, chest pain, dizziness",4,Anxiety Disorder,moderate
+"excessive thirst, blurred vision, fatigue, dizziness",4,Diabetes,moderate
+"shortness of breath, chest pain, blurred vision, numbness, joint pain",5,Hypothyroidism,severe
+"rash, numbness, shortness of breath",3,GERD,mild
+"swelling, vomiting, shortness of breath, fatigue",4,Hypothyroidism,mild
+"excessive thirst, frequent urination, palpitations",3,Hypothyroidism,mild
+"numbness, fatigue, palpitations, excessive thirst, sore throat",5,Influenza,mild
+"cough, abdominal pain, insomnia, joint pain, numbness",5,GERD,moderate
+"rash, vomiting, nausea, back pain",4,Anemia,severe
+"vomiting, blurred vision",2,Cardiac Arrhythmia,moderate
+"palpitations, headache, frequent urination, shortness of breath",4,Hypertension,mild
+"palpitations, cough, excessive thirst, abdominal pain, insomnia",5,Anxiety Disorder,moderate
+"weight loss, back pain, abdominal pain",3,GERD,mild
+"sore throat, frequent urination, palpitations, joint pain",4,Common Cold,moderate
+"rash, insomnia, shortness of breath, anxiety, cough",5,Diabetes,moderate
+"weight loss, palpitations, headache, rash",4,GERD,mild
+"chest pain, joint pain",2,Diabetes,moderate
+"fatigue, cough, insomnia, shortness of breath, palpitations",5,Anemia,moderate
+"back pain, frequent urination, fever, numbness, weight loss",5,Hypothyroidism,mild
+"insomnia, frequent urination, vomiting, nausea, dizziness",5,Diabetes,mild
+"fatigue, nausea",2,Diabetes,moderate
+"swelling, shortness of breath, numbness, back pain, sore throat",5,Anxiety Disorder,moderate
+"nausea, weight loss, blurred vision, cough",4,Diabetes,mild
+"abdominal pain, weight loss",2,GERD,mild
+"palpitations, headache",2,Common Cold,moderate
+"shortness of breath, palpitations",2,Cardiac Arrhythmia,moderate
+"shortness of breath, numbness, rash, sweating",4,Anemia,severe
+"insomnia, dizziness, cough",3,Diabetes,mild
+"fatigue, headache",2,Diabetes,mild
+"anxiety, weight loss, vomiting, abdominal pain",4,Anxiety Disorder,mild
+"rash, headache, excessive thirst, anxiety, blurred vision",5,Influenza,moderate
+"excessive thirst, headache, joint pain",3,Influenza,mild
+"vomiting, palpitations",2,Anxiety Disorder,moderate
+"insomnia, weight loss",2,Hypothyroidism,mild
+"frequent urination, back pain, anxiety, insomnia, nausea",5,Anemia,mild
+"weight loss, excessive thirst, sweating",3,Common Cold,mild
+"fever, anxiety, vomiting, fatigue",4,Hypothyroidism,mild
+"joint pain, fatigue, excessive thirst, sweating, fever",5,Anemia,moderate
+"sore throat, headache, frequent urination",3,Cardiac Arrhythmia,mild
+"chest pain, palpitations, swelling",3,Cardiac Arrhythmia,moderate
+"insomnia, dizziness, sore throat, nausea",4,Anemia,moderate
+"shortness of breath, rash, excessive thirst, cough, numbness",5,GERD,mild
+"shortness of breath, abdominal pain",2,Hypothyroidism,moderate
+"sore throat, rash",2,Migraine,mild
+"weight loss, cough, shortness of breath",3,Cardiac Arrhythmia,severe
+"numbness, joint pain, sweating, frequent urination, anxiety",5,Anxiety Disorder,mild
+"rash, back pain, fatigue, nausea, abdominal pain",5,Influenza,moderate
+"palpitations, joint pain, frequent urination",3,Anxiety Disorder,mild
+"abdominal pain, cough, palpitations, nausea",4,Anxiety Disorder,moderate
+"rash, blurred vision, vomiting, weight loss",4,Hypertension,moderate
+"vomiting, frequent urination, abdominal pain, numbness",4,Hypertension,severe
+"shortness of breath, dizziness, vomiting, blurred vision",4,Diabetes,moderate
+"rash, abdominal pain, dizziness, frequent urination",4,Anemia,mild
+"frequent urination, insomnia, anxiety, back pain",4,Migraine,mild
+"anxiety, back pain, swelling, fever, rash",5,Migraine,severe
+"chest pain, palpitations, blurred vision",3,Influenza,mild
+"vomiting, sweating, headache, numbness",4,Migraine,mild
+"nausea, frequent urination",2,Influenza,mild
+"rash, vomiting",2,Anxiety Disorder,moderate
+"cough, rash, back pain, abdominal pain, chest pain",5,Migraine,moderate
+"sweating, sore throat, fatigue, excessive thirst, chest pain",5,GERD,mild
+"weight loss, numbness, vomiting",3,Common Cold,mild
+"abdominal pain, blurred vision, vomiting",3,GERD,mild
+"fatigue, joint pain",2,Diabetes,moderate
+"abdominal pain, sore throat, chest pain, back pain, excessive thirst",5,Common Cold,mild
+"weight loss, dizziness, fatigue, anxiety",4,Migraine,mild
+"numbness, blurred vision, fever, chest pain",4,Migraine,moderate
+"swelling, shortness of breath, excessive thirst, blurred vision",4,Hypothyroidism,mild
+"shortness of breath, blurred vision, insomnia, dizziness, sore throat",5,Influenza,moderate
+"blurred vision, anxiety, dizziness, frequent urination",4,Influenza,moderate
+"fever, shortness of breath, swelling",3,Diabetes,mild
+"cough, shortness of breath, nausea, fatigue, chest pain",5,Diabetes,moderate
+"weight loss, back pain, abdominal pain",3,Cardiac Arrhythmia,moderate
+"fever, anxiety",2,Anemia,mild
+"palpitations, vomiting, shortness of breath, blurred vision, cough",5,Common Cold,mild
+"nausea, headache, vomiting",3,Common Cold,mild
+"abdominal pain, weight loss, chest pain",3,Common Cold,mild
+"sweating, numbness, nausea",3,Cardiac Arrhythmia,mild
+"joint pain, rash, swelling",3,Common Cold,mild
+"numbness, insomnia, headache, fever, swelling",5,Influenza,moderate
+"sweating, weight loss, nausea",3,Migraine,moderate
+"frequent urination, headache, back pain, fever, joint pain",5,Common Cold,mild
+"shortness of breath, insomnia, blurred vision, headache, frequent urination",5,Cardiac Arrhythmia,severe
+"vomiting, headache, weight loss, fever, sweating",5,Hypertension,mild
+"palpitations, fever, nausea, insomnia, vomiting",5,Common Cold,moderate
+"fatigue, joint pain, insomnia",3,Anxiety Disorder,moderate
+"sweating, swelling, joint pain, excessive thirst, sore throat",5,Anemia,severe
+"cough, fatigue",2,Common Cold,severe
+"dizziness, shortness of breath",2,GERD,severe
+"nausea, headache",2,Anemia,mild
+"cough, headache, weight loss, rash",4,Cardiac Arrhythmia,mild
+"blurred vision, chest pain, excessive thirst, insomnia, abdominal pain",5,Common Cold,severe
+"anxiety, sweating",2,Diabetes,moderate
+"shortness of breath, back pain, swelling, insomnia, dizziness",5,Migraine,moderate
+"fever, insomnia",2,Common Cold,severe
+"rash, sweating, vomiting",3,Cardiac Arrhythmia,mild
+"nausea, anxiety, fatigue",3,Anxiety Disorder,mild
+"rash, shortness of breath, chest pain, frequent urination, back pain",5,Migraine,severe
+"shortness of breath, numbness",2,Hypertension,mild
+"anxiety, fever, blurred vision, abdominal pain, cough",5,GERD,mild
+"frequent urination, numbness, dizziness",3,GERD,moderate
+"rash, weight loss, abdominal pain",3,Diabetes,mild
+"blurred vision, nausea",2,GERD,mild
+"vomiting, cough, sweating",3,Anemia,moderate
+"chest pain, frequent urination, cough",3,Hypertension,mild
+"joint pain, excessive thirst, headache, blurred vision",4,Influenza,mild
+"cough, rash, weight loss, swelling, insomnia",5,Anxiety Disorder,moderate
+"dizziness, fever",2,Anxiety Disorder,mild
+"back pain, vomiting, dizziness",3,Hypertension,mild
+"excessive thirst, shortness of breath",2,Migraine,mild
+"rash, fever, swelling, frequent urination",4,Migraine,severe
+"abdominal pain, joint pain, anxiety, sore throat",4,Anxiety Disorder,moderate
+"cough, numbness, weight loss",3,Hypertension,mild
+"rash, anxiety, dizziness, numbness, vomiting",5,Hypertension,severe
+"excessive thirst, anxiety",2,Anxiety Disorder,moderate
+"shortness of breath, anxiety, fever",3,Cardiac Arrhythmia,severe
+"nausea, fatigue",2,Hypertension,mild
+"dizziness, weight loss",2,Diabetes,moderate
+"fever, insomnia, vomiting, frequent urination",4,Hypothyroidism,mild
+"sweating, numbness, chest pain, vomiting",4,Hypothyroidism,moderate
+"fatigue, numbness, swelling, chest pain, frequent urination",5,Hypothyroidism,severe
+"anxiety, fever, swelling, shortness of breath, rash",5,Hypertension,moderate
+"abdominal pain, numbness",2,GERD,mild
+"nausea, blurred vision, abdominal pain",3,Migraine,moderate
+"abdominal pain, blurred vision, sweating",3,GERD,moderate
+"sweating, anxiety, sore throat, abdominal pain",4,Common Cold,moderate
+"back pain, vomiting",2,GERD,mild
+"back pain, swelling, dizziness",3,Common Cold,moderate
+"nausea, vomiting, headache, back pain",4,Hypertension,severe
+"vomiting, back pain, joint pain",3,Common Cold,moderate
+"chest pain, blurred vision, cough, vomiting, nausea",5,Common Cold,severe
+"fever, palpitations, excessive thirst, frequent urination, cough",5,Hypothyroidism,moderate
+"excessive thirst, headache",2,Hypertension,mild
+"excessive thirst, chest pain",2,Diabetes,mild
+"joint pain, swelling, dizziness",3,Influenza,mild
+"dizziness, fever, fatigue, back pain",4,GERD,moderate
+"vomiting, back pain, numbness, nausea, chest pain",5,Migraine,severe
+"frequent urination, nausea, sweating, swelling, fever",5,Influenza,moderate
+"sweating, shortness of breath, rash, swelling, frequent urination",5,Anxiety Disorder,moderate
+"fever, dizziness, rash, sore throat, shortness of breath",5,Migraine,moderate
+"frequent urination, joint pain, fever",3,Influenza,mild
+"weight loss, excessive thirst, vomiting",3,Influenza,moderate
+"joint pain, cough, shortness of breath, weight loss, abdominal pain",5,Influenza,moderate
+"rash, anxiety",2,Anemia,moderate
+"anxiety, blurred vision",2,Anemia,mild
+"swelling, excessive thirst, anxiety",3,Cardiac Arrhythmia,mild
+"sweating, vomiting, chest pain",3,Common Cold,mild
+"chest pain, frequent urination",2,Cardiac Arrhythmia,severe
+"numbness, blurred vision",2,Influenza,mild
+"shortness of breath, weight loss, joint pain, anxiety, palpitations",5,Anxiety Disorder,mild
+"rash, palpitations, numbness, vomiting, anxiety",5,Common Cold,moderate
+"dizziness, headache, cough, rash, insomnia",5,GERD,moderate
+"headache, rash, abdominal pain, cough, shortness of breath",5,Influenza,mild
+"abdominal pain, fever",2,Hypothyroidism,mild
+"swelling, weight loss, blurred vision, shortness of breath",4,Influenza,mild
+"anxiety, palpitations, dizziness, weight loss",4,Hypothyroidism,moderate
+"vomiting, abdominal pain, fatigue, weight loss",4,Migraine,mild
+"joint pain, fever, sweating, anxiety",4,Hypertension,mild
+"sore throat, headache, back pain, fatigue, anxiety",5,Migraine,moderate
+"abdominal pain, cough, joint pain",3,Anemia,mild
+"nausea, abdominal pain, anxiety, numbness, fever",5,Anxiety Disorder,mild
+"palpitations, weight loss, cough",3,GERD,mild
+"abdominal pain, sore throat, shortness of breath",3,GERD,mild
+"joint pain, sore throat",2,Hypertension,mild
+"chest pain, excessive thirst",2,Common Cold,severe
+"dizziness, fatigue, anxiety, frequent urination",4,Common Cold,mild
+"swelling, palpitations, sore throat, anxiety, fever",5,Influenza,mild
+"palpitations, nausea",2,GERD,mild
+"sweating, swelling",2,Hypertension,mild
+"blurred vision, sweating, cough, fatigue, fever",5,Cardiac Arrhythmia,mild
+"palpitations, sweating, numbness, blurred vision",4,Migraine,moderate
+"blurred vision, swelling, palpitations, headache, numbness",5,Diabetes,mild
+"vomiting, blurred vision, dizziness",3,Anxiety Disorder,mild
+"joint pain, palpitations",2,Diabetes,moderate
+"back pain, fever",2,GERD,moderate
+"headache, abdominal pain, blurred vision, shortness of breath, chest pain",5,Hypothyroidism,mild
+"palpitations, headache",2,Cardiac Arrhythmia,moderate
+"blurred vision, abdominal pain",2,Anemia,moderate
+"blurred vision, joint pain, shortness of breath, excessive thirst",4,Cardiac Arrhythmia,moderate
+"headache, blurred vision, weight loss",3,Hypothyroidism,mild
+"nausea, blurred vision, chest pain, swelling, insomnia",5,Diabetes,severe
+"vomiting, weight loss, sweating, back pain",4,GERD,mild
+"joint pain, sweating",2,Anemia,moderate
+"excessive thirst, palpitations, headache, vomiting",4,Common Cold,mild
+"fever, insomnia",2,Cardiac Arrhythmia,mild
+"nausea, dizziness, numbness, fatigue",4,Cardiac Arrhythmia,mild
+"excessive thirst, cough, headache, nausea, chest pain",5,Migraine,moderate
+"rash, back pain, shortness of breath, frequent urination",4,Diabetes,mild
+"vomiting, blurred vision, cough, sore throat",4,Hypothyroidism,moderate
+"nausea, anxiety",2,Anxiety Disorder,mild
+"insomnia, rash, palpitations, cough",4,GERD,moderate
+"chest pain, shortness of breath, abdominal pain, numbness",4,Anemia,moderate
+"palpitations, sore throat, insomnia, sweating, vomiting",5,Anemia,moderate
+"frequent urination, headache",2,Diabetes,moderate
+"vomiting, sore throat, insomnia, sweating, chest pain",5,Migraine,moderate
+"fever, rash, joint pain",3,Anemia,moderate
+"anxiety, sore throat, back pain, sweating",4,Hypertension,mild
+"palpitations, shortness of breath, abdominal pain, rash",4,Cardiac Arrhythmia,moderate
+"fatigue, fever, anxiety, excessive thirst, insomnia",5,Anemia,mild
+"abdominal pain, fatigue, insomnia",3,GERD,mild
+"chest pain, dizziness",2,Hypothyroidism,mild
+"sore throat, weight loss, fatigue",3,Common Cold,moderate
+"chest pain, vomiting, swelling, fatigue, insomnia",5,Hypothyroidism,mild
+"abdominal pain, insomnia",2,Hypothyroidism,mild
+"chest pain, back pain, fatigue, palpitations",4,Anemia,moderate
+"fatigue, numbness, sweating",3,Migraine,moderate
+"weight loss, sweating, swelling",3,Hypertension,mild
+"swelling, fever, numbness, dizziness, vomiting",5,Common Cold,severe
+"sore throat, nausea, fever, shortness of breath",4,Migraine,moderate
+"blurred vision, anxiety, fatigue, dizziness, sore throat",5,Migraine,moderate
+"blurred vision, dizziness, insomnia, headache",4,GERD,moderate
+"chest pain, numbness, fatigue, dizziness, excessive thirst",5,Hypertension,moderate
+"abdominal pain, sore throat, shortness of breath, dizziness",4,Common Cold,moderate
+"shortness of breath, numbness",2,Cardiac Arrhythmia,mild
+"swelling, excessive thirst, sore throat, cough",4,Hypertension,mild
+"weight loss, cough, fever",3,Diabetes,mild
+"headache, blurred vision, dizziness, fatigue",4,Influenza,moderate
+"weight loss, fever",2,GERD,moderate
+"rash, anxiety",2,Anemia,severe
+"chest pain, anxiety",2,Hypothyroidism,severe
+"fatigue, nausea, frequent urination, weight loss",4,Cardiac Arrhythmia,mild
+"fatigue, fever, abdominal pain",3,Influenza,moderate
+"weight loss, sore throat, dizziness, palpitations",4,Migraine,mild
+"back pain, anxiety, cough",3,Diabetes,moderate
+"nausea, shortness of breath, abdominal pain, back pain",4,Anemia,moderate
+"vomiting, cough",2,Common Cold,mild
+"headache, rash, insomnia, joint pain, abdominal pain",5,Anxiety Disorder,mild
+"palpitations, fatigue, fever",3,Anemia,moderate
+"frequent urination, cough, sore throat, excessive thirst",4,GERD,severe
+"anxiety, headache",2,Influenza,moderate
+"shortness of breath, blurred vision, weight loss, chest pain",4,Anemia,moderate
+"fever, shortness of breath, rash, blurred vision, joint pain",5,Hypertension,severe
+"palpitations, dizziness, joint pain",3,Migraine,mild
+"abdominal pain, dizziness, sweating",3,Common Cold,mild
+"chest pain, back pain, frequent urination",3,Influenza,mild
+"headache, dizziness, sweating",3,Anemia,mild
+"weight loss, headache, sore throat, excessive thirst",4,Hypertension,severe
+"vomiting, back pain, joint pain, headache, numbness",5,Influenza,moderate
+"vomiting, chest pain, blurred vision, cough, back pain",5,Common Cold,moderate
+"anxiety, sweating",2,Hypertension,mild
+"joint pain, blurred vision, sweating, frequent urination, fatigue",5,Anemia,mild
+"frequent urination, blurred vision, headache, cough",4,Anxiety Disorder,mild
+"palpitations, swelling, joint pain, weight loss",4,Common Cold,mild
+"sore throat, joint pain, dizziness, fatigue, weight loss",5,Hypothyroidism,mild
+"shortness of breath, frequent urination",2,Migraine,moderate
+"frequent urination, anxiety, shortness of breath",3,Common Cold,mild
+"sore throat, joint pain",2,Anxiety Disorder,severe
+"cough, chest pain, nausea, vomiting",4,Anemia,severe
+"fatigue, sweating, insomnia, cough, frequent urination",5,Influenza,mild
+"dizziness, anxiety, shortness of breath",3,Cardiac Arrhythmia,mild
+"nausea, frequent urination, chest pain, cough, sweating",5,Hypothyroidism,mild
+"palpitations, dizziness",2,Cardiac Arrhythmia,mild
+"sweating, rash, swelling, palpitations",4,Hypertension,mild
+"sweating, fever, abdominal pain, chest pain",4,Diabetes,moderate
+"joint pain, frequent urination",2,Common Cold,moderate
+"weight loss, shortness of breath, abdominal pain",3,Influenza,moderate
+"back pain, dizziness, blurred vision",3,Common Cold,moderate
+"weight loss, frequent urination, vomiting, sweating",4,Hypertension,severe
+"palpitations, fever, nausea, insomnia",4,Migraine,moderate
+"frequent urination, shortness of breath, abdominal pain, headache, joint pain",5,Common Cold,mild
+"vomiting, swelling",2,Anxiety Disorder,moderate
+"dizziness, headache, shortness of breath, sweating",4,Diabetes,mild
+"sweating, nausea, weight loss",3,Hypertension,mild
+"excessive thirst, chest pain, headache",3,Cardiac Arrhythmia,mild
+"vomiting, chest pain",2,Hypothyroidism,mild
+"excessive thirst, joint pain",2,Common Cold,severe
+"cough, insomnia, frequent urination, headache",4,Diabetes,moderate
+"rash, shortness of breath, numbness, dizziness, blurred vision",5,Cardiac Arrhythmia,mild
+"chest pain, blurred vision, palpitations",3,Migraine,moderate
+"weight loss, abdominal pain",2,GERD,moderate
+"anxiety, cough",2,Anxiety Disorder,moderate
+"chest pain, weight loss, blurred vision, fever, numbness",5,GERD,mild
+"nausea, frequent urination, sore throat",3,Cardiac Arrhythmia,mild
+"chest pain, blurred vision, excessive thirst, rash, shortness of breath",5,Hypertension,moderate
+"palpitations, vomiting, swelling",3,Anxiety Disorder,mild
+"sweating, numbness",2,Anemia,moderate
+"chest pain, excessive thirst, sweating, abdominal pain, frequent urination",5,GERD,moderate
+"cough, sore throat",2,Diabetes,mild
+"chest pain, palpitations, sore throat",3,Cardiac Arrhythmia,moderate
+"abdominal pain, vomiting, fever, sweating",4,Hypothyroidism,severe
+"dizziness, blurred vision, palpitations, abdominal pain, nausea",5,GERD,moderate
+"dizziness, vomiting, headache, sore throat",4,Migraine,moderate
+"anxiety, chest pain, excessive thirst",3,GERD,moderate
+"cough, back pain",2,Common Cold,moderate
+"numbness, weight loss, vomiting, cough",4,Cardiac Arrhythmia,moderate
+"sweating, abdominal pain, cough, anxiety",4,Hypothyroidism,moderate
+"weight loss, insomnia, headache, swelling",4,Anxiety Disorder,moderate
+"sore throat, nausea, cough, rash",4,Cardiac Arrhythmia,mild
+"insomnia, chest pain, fatigue",3,Hypothyroidism,mild
+"headache, anxiety, insomnia",3,Diabetes,mild
+"vomiting, chest pain, rash, swelling",4,Hypothyroidism,mild
+"dizziness, vomiting, back pain",3,Anemia,mild
+"chest pain, nausea, insomnia, cough",4,Diabetes,severe
+"back pain, chest pain, blurred vision, numbness",4,Influenza,moderate
+"shortness of breath, rash, headache, vomiting, back pain",5,Anemia,mild
+"joint pain, nausea, blurred vision, numbness",4,GERD,moderate
+"rash, swelling, dizziness",3,Anxiety Disorder,mild
+"joint pain, abdominal pain",2,GERD,mild
+"weight loss, frequent urination",2,Influenza,mild
+"frequent urination, fatigue",2,Cardiac Arrhythmia,mild
+"numbness, cough",2,Influenza,moderate
+"dizziness, nausea, sore throat, weight loss",4,Hypertension,mild
+"abdominal pain, cough, fatigue, headache, sore throat",5,GERD,severe
+"insomnia, nausea",2,Common Cold,mild
+"headache, anxiety, palpitations",3,Influenza,mild
+"fever, joint pain",2,Hypertension,moderate
+"palpitations, rash, headache, back pain, excessive thirst",5,Migraine,mild
+"cough, insomnia",2,Migraine,mild
+"headache, numbness, abdominal pain, fatigue, back pain",5,Hypertension,moderate
+"back pain, sweating, numbness, cough, swelling",5,Migraine,mild
+"back pain, abdominal pain, sweating",3,Cardiac Arrhythmia,mild
+"vomiting, rash, fever",3,Hypertension,mild
+"frequent urination, palpitations, insomnia, fatigue",4,Cardiac Arrhythmia,severe
+"palpitations, dizziness",2,Anxiety Disorder,mild
+"weight loss, palpitations, joint pain, insomnia",4,Anxiety Disorder,mild
+"anxiety, fatigue",2,Hypertension,mild
+"back pain, fatigue, insomnia, sore throat, rash",5,Diabetes,mild
+"chest pain, cough, headache, back pain, sweating",5,Hypertension,mild
+"fatigue, excessive thirst, abdominal pain, fever",4,Influenza,mild
+"chest pain, blurred vision, sweating, dizziness",4,Diabetes,mild
+"blurred vision, weight loss, joint pain, dizziness, rash",5,GERD,severe
+"headache, insomnia, shortness of breath, sweating, fever",5,Diabetes,moderate
+"nausea, weight loss",2,Diabetes,mild
+"palpitations, weight loss, fever, nausea, joint pain",5,Migraine,mild
+"sweating, swelling",2,Common Cold,moderate
+"excessive thirst, dizziness, nausea",3,Cardiac Arrhythmia,moderate
+"insomnia, cough, fatigue",3,Anxiety Disorder,mild
+"dizziness, anxiety",2,Hypothyroidism,moderate
+"weight loss, back pain, swelling, frequent urination",4,Influenza,mild
+"excessive thirst, sweating, weight loss",3,Common Cold,mild
+"fever, sore throat, headache, anxiety, vomiting",5,Anemia,mild
+"sore throat, dizziness, chest pain, anxiety, excessive thirst",5,Migraine,mild
+"blurred vision, insomnia",2,Anxiety Disorder,mild
+"blurred vision, insomnia",2,Cardiac Arrhythmia,severe
+"excessive thirst, abdominal pain, headache, sweating",4,Anemia,mild
+"rash, numbness, shortness of breath",3,Hypothyroidism,mild
+"nausea, chest pain, joint pain, cough",4,Migraine,moderate
+"vomiting, back pain, joint pain, rash, cough",5,Anxiety Disorder,moderate
+"shortness of breath, palpitations, nausea, vomiting",4,Cardiac Arrhythmia,moderate
+"chest pain, dizziness, joint pain",3,Hypothyroidism,mild
+"dizziness, vomiting, joint pain",3,GERD,mild
+"insomnia, nausea",2,Hypothyroidism,mild
+"sweating, abdominal pain, frequent urination, back pain",4,Diabetes,moderate
+"vomiting, frequent urination",2,Hypertension,mild
+"swelling, palpitations, insomnia, rash, numbness",5,Cardiac Arrhythmia,moderate
+"blurred vision, insomnia",2,GERD,moderate
+"sore throat, swelling, nausea, excessive thirst",4,GERD,moderate
+"weight loss, fever, back pain",3,Migraine,mild
+"sore throat, sweating, weight loss, palpitations, cough",5,Hypothyroidism,mild
+"fever, back pain",2,Cardiac Arrhythmia,mild
+"nausea, weight loss, abdominal pain",3,Anxiety Disorder,mild
+"cough, abdominal pain",2,Diabetes,severe
+"frequent urination, shortness of breath, sweating",3,Hypothyroidism,moderate
+"frequent urination, blurred vision, palpitations, joint pain",4,Anxiety Disorder,mild
+"rash, abdominal pain, excessive thirst",3,Hypothyroidism,moderate
+"fever, anxiety, excessive thirst",3,Influenza,moderate
+"numbness, shortness of breath, abdominal pain",3,Influenza,mild
+"chest pain, dizziness",2,Migraine,mild
+"sweating, excessive thirst, headache",3,GERD,mild
+"swelling, shortness of breath",2,Migraine,moderate
+"fatigue, abdominal pain, insomnia, back pain",4,Common Cold,moderate
+"insomnia, swelling, fatigue, sore throat",4,Anxiety Disorder,severe
+"fever, anxiety",2,Influenza,moderate
+"vomiting, palpitations",2,Anemia,severe
+"excessive thirst, palpitations, vomiting, frequent urination",4,Cardiac Arrhythmia,mild
+"fever, abdominal pain, blurred vision",3,Anxiety Disorder,mild
+"fever, palpitations, sweating",3,GERD,moderate
+"cough, abdominal pain",2,Hypertension,moderate
+"cough, fatigue, fever, weight loss",4,Diabetes,mild
+"chest pain, rash, shortness of breath",3,Migraine,moderate
+"sore throat, numbness, vomiting, headache, nausea",5,Common Cold,severe
+"sore throat, back pain, weight loss, cough",4,Hypothyroidism,moderate
+"sore throat, joint pain, cough, blurred vision, weight loss",5,Cardiac Arrhythmia,mild
+"shortness of breath, blurred vision, vomiting, dizziness",4,Anemia,mild
+"dizziness, joint pain, cough",3,Anxiety Disorder,mild
+"nausea, back pain, sweating",3,Influenza,mild
+"cough, headache, joint pain, vomiting, back pain",5,GERD,moderate
+"abdominal pain, sore throat, joint pain",3,Common Cold,mild
+"chest pain, fatigue",2,Common Cold,moderate
+"nausea, shortness of breath, abdominal pain",3,Hypertension,moderate
+"anxiety, abdominal pain, fatigue, sore throat",4,Anxiety Disorder,moderate
+"chest pain, back pain",2,Anemia,mild
+"nausea, joint pain, numbness, fatigue, headache",5,Diabetes,severe
+"joint pain, frequent urination, numbness, fatigue, anxiety",5,Migraine,moderate
+"cough, back pain, dizziness, headache, abdominal pain",5,Hypertension,mild
+"joint pain, abdominal pain, cough",3,Hypothyroidism,mild
+"dizziness, cough, abdominal pain, swelling, palpitations",5,Hypertension,mild
+"swelling, insomnia",2,Migraine,moderate
+"excessive thirst, insomnia, palpitations, nausea",4,Anemia,moderate
+"insomnia, fatigue, sore throat, anxiety",4,Hypothyroidism,mild
+"vomiting, nausea, insomnia, blurred vision",4,GERD,moderate
+"sweating, joint pain, sore throat",3,Migraine,mild
+"palpitations, blurred vision",2,Influenza,mild
+"back pain, shortness of breath, fever, dizziness, weight loss",5,Anemia,severe
+"cough, back pain, anxiety, numbness",4,Hypertension,moderate
+"sore throat, excessive thirst",2,Anemia,mild
+"palpitations, cough",2,Common Cold,mild
+"headache, rash",2,GERD,mild
+"frequent urination, weight loss",2,Cardiac Arrhythmia,moderate
+"abdominal pain, fever, vomiting, rash, chest pain",5,Influenza,moderate
+"fatigue, headache",2,Common Cold,moderate
+"frequent urination, back pain",2,Hypertension,mild
+"cough, blurred vision",2,Migraine,mild
+"sweating, numbness",2,Influenza,mild
+"nausea, anxiety",2,Cardiac Arrhythmia,mild
+"anxiety, cough, excessive thirst, abdominal pain",4,GERD,mild
+"shortness of breath, numbness, blurred vision",3,Diabetes,mild
+"dizziness, joint pain, fever, frequent urination",4,Anemia,moderate
+"abdominal pain, anxiety, fever",3,Diabetes,moderate
+"frequent urination, dizziness, nausea",3,Anemia,severe
+"rash, numbness, headache",3,Influenza,severe
+"blurred vision, back pain",2,Influenza,mild
+"nausea, dizziness, anxiety, vomiting, numbness",5,Migraine,mild
+"weight loss, numbness, fever, vomiting",4,Hypothyroidism,mild
+"sweating, weight loss, anxiety, nausea",4,Hypertension,moderate

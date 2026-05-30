@@ -1,0 +1,385 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Health Timeline — Aura MediX{% endblock %}
+{% block head %}
+<style>
+/* ── Layout ─────────────────────────────────────── */
+.timeline-wrap { max-width: 860px; margin: 0 auto; }
+.timeline { position: relative; padding: 0 0 0 52px; }
+.timeline-item { position: relative; margin-bottom: 32px; animation: fadeSlideIn 0.4s ease both; }
+.timeline-item:nth-child(1)  { animation-delay: 0.05s; }
+.timeline-item:nth-child(2)  { animation-delay: 0.10s; }
+.timeline-item:nth-child(3)  { animation-delay: 0.15s; }
+.timeline-item:nth-child(n+4){ animation-delay: 0.20s; }
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Dot & line ─────────────────────────────────── */
+.timeline-dot {
+  position: absolute; left: -58px; top: 22px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--bg-base), 0 0 0 5px var(--color-primary);
+  display: flex; align-items: center; justify-content: center;
+}
+.timeline-dot.prediction { background: #60A5FA; box-shadow: 0 0 0 3px var(--bg-base), 0 0 0 5px #60A5FA; }
+.timeline-dot.report     { background: #34D399; box-shadow: 0 0 0 3px var(--bg-base), 0 0 0 5px #34D399; }
+.timeline-dot.medicine   { background: #F472B6; box-shadow: 0 0 0 3px var(--bg-base), 0 0 0 5px #F472B6; }
+.timeline-dot.ai_doctor  { background: #A78BFA; box-shadow: 0 0 0 3px var(--bg-base), 0 0 0 5px #A78BFA; }
+.timeline-dot.emergency  { background: #F87171; box-shadow: 0 0 0 3px var(--bg-base), 0 0 0 5px #F87171; }
+.timeline-dot.vitals     { background: #34D399; box-shadow: 0 0 0 3px var(--bg-base), 0 0 0 5px #34D399; }
+.timeline-dot.symptom    { background: #FBBF24; box-shadow: 0 0 0 3px var(--bg-base), 0 0 0 5px #FBBF24; }
+
+.timeline-line {
+  position: absolute; left: -52px; top: 36px;
+  width: 2px; height: calc(100% + 32px);
+  background: linear-gradient(to bottom, rgba(167,139,250,0.35), transparent);
+}
+.timeline-item:last-child .timeline-line { display: none; }
+
+/* ── Card ───────────────────────────────────────── */
+.timeline-card {
+  background: var(--gradient-card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 20px 24px;
+  transition: border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+.timeline-card:hover {
+  border-color: var(--border-hover);
+  transform: translateX(4px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+}
+.timeline-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+.timeline-type {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; padding: 3px 10px;
+  border-radius: var(--r-full);
+  background: rgba(167,139,250,0.12); color: #A78BFA;
+  border: 1px solid rgba(167,139,250,0.22);
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.timeline-type.prediction { background: rgba(96,165,250,0.10); color: #60A5FA; border-color: rgba(96,165,250,0.22); }
+.timeline-type.report     { background: rgba(52,211,153,0.10); color: #34D399; border-color: rgba(52,211,153,0.22); }
+.timeline-type.medicine   { background: rgba(244,114,182,0.10); color: #F472B6; border-color: rgba(244,114,182,0.22); }
+.timeline-type.ai_doctor  { background: rgba(167,139,250,0.10); color: #A78BFA; border-color: rgba(167,139,250,0.22); }
+.timeline-type.emergency  { background: rgba(248,113,113,0.12); color: #F87171; border-color: rgba(248,113,113,0.22); }
+.timeline-type.vitals     { background: rgba(52,211,153,0.10); color: #34D399; border-color: rgba(52,211,153,0.22); }
+.timeline-type.symptom    { background: rgba(251,191,36,0.10); color: #FBBF24; border-color: rgba(251,191,36,0.22); }
+
+.timeline-date { font-size: 12px; color: var(--text-muted); margin-left: auto; white-space: nowrap; }
+.timeline-title { font-family: var(--f-head); font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+.timeline-body  { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+.timeline-confidence { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
+.timeline-confidence span { color: var(--color-primary); font-weight: 600; }
+
+.risk-pill { display: inline-block; padding: 3px 10px; border-radius: var(--r-full); font-size: 11px; font-weight: 600; margin-top: 10px; }
+.risk-pill.low      { background: rgba(52,211,153,0.12); color: #34D399; }
+.risk-pill.medium   { background: rgba(251,191,36,0.12);  color: #FBBF24; }
+.risk-pill.high     { background: rgba(248,113,113,0.12); color: #F87171; }
+.risk-pill.critical { background: rgba(239,68,68,0.18);   color: #EF4444; }
+
+/* ── Stats bar ──────────────────────────────────── */
+.timeline-stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px; margin-bottom: 32px;
+}
+.stat-chip {
+  background: var(--gradient-card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 14px 16px; text-align: center;
+}
+.stat-chip-num  { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+.stat-chip-label{ font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+/* ── Empty state ────────────────────────────────── */
+.empty-state {
+  text-align: center; padding: 72px 24px;
+  background: var(--gradient-card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); color: var(--text-muted);
+}
+.empty-state-icon {
+  width: 80px; height: 80px; margin: 0 auto 20px;
+  border-radius: 50%;
+  background: rgba(167,139,250,0.08);
+  border: 1px solid rgba(167,139,250,0.18);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; color: rgba(167,139,250,0.4);
+}
+.empty-state h3 { font-family: var(--f-head); font-size: 18px; color: var(--text-primary); margin-bottom: 8px; }
+.empty-state p  { font-size: 13px; max-width: 360px; margin: 0 auto 24px; }
+
+/* ── Loading skeleton ───────────────────────────── */
+.skeleton-item { margin-bottom: 28px; padding-left: 52px; }
+.skeleton-card {
+  background: var(--gradient-card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 20px 24px;
+}
+.skeleton-line {
+  height: 10px; border-radius: 6px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.04) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  margin-bottom: 10px;
+}
+.skeleton-line.w-30 { width: 30%; }
+.skeleton-line.w-60 { width: 60%; }
+.skeleton-line.w-90 { width: 90%; }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* ── Error state ────────────────────────────────── */
+.error-banner {
+  background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.22);
+  border-radius: var(--r-lg); padding: 16px 20px;
+  color: #F87171; font-size: 13px; margin-bottom: 24px;
+  display: none; align-items: center; gap: 10px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="module-wrapper">
+  <!-- ── Page header ───────────────────────────── -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Health <span>Timeline</span></h1>
+      <p class="page-subtitle">Your complete health journey — predictions, reports, and milestones</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;" id="filterBtns">
+      <button class="btn btn-outline btn-sm" onclick="filterTimeline('all',this)">All</button>
+      <button class="btn btn-ghost btn-sm" onclick="filterTimeline('prediction',this)">
+        <i class="fas fa-dna"></i> Predictions
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="filterTimeline('report',this)">
+        <i class="fas fa-file-medical"></i> Reports
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="filterTimeline('medicine',this)">
+        <i class="fas fa-pills"></i> Medicine
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="filterTimeline('ai_doctor',this)">
+        <i class="fas fa-robot"></i> AI Doctor
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Error banner ───────────────────────────── -->
+  <div class="error-banner" id="errorBanner">
+    <i class="fas fa-exclamation-circle"></i>
+    <span id="errorMsg">Could not load timeline data.</span>
+  </div>
+
+  <!-- ── Stats strip ────────────────────────────── -->
+  <div class="timeline-stats" id="statsStrip" style="display:none;">
+    <div class="stat-chip">
+      <div class="stat-chip-num" id="statTotal">0</div>
+      <div class="stat-chip-label">Total Events</div>
+    </div>
+    <div class="stat-chip">
+      <div class="stat-chip-num" id="statPred">0</div>
+      <div class="stat-chip-label">Predictions</div>
+    </div>
+    <div class="stat-chip">
+      <div class="stat-chip-num" id="statReports">0</div>
+      <div class="stat-chip-label">Reports</div>
+    </div>
+    <div class="stat-chip">
+      <div class="stat-chip-num" id="statDays">90</div>
+      <div class="stat-chip-label">Days Shown</div>
+    </div>
+  </div>
+
+  <!-- ── Loading skeleton ──────────────────────── -->
+  <div id="loadingSkeleton">
+    {% for _ in range(3) %}
+    <div class="skeleton-item">
+      <div class="skeleton-card">
+        <div class="skeleton-line w-30"></div>
+        <div class="skeleton-line w-60"></div>
+        <div class="skeleton-line w-90"></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- ── Timeline ───────────────────────────────── -->
+  <div class="timeline-wrap" id="timelineWrap" style="display:none;">
+    <div class="timeline" id="timeline"></div>
+  </div>
+
+  <!-- ── Empty state ───────────────────────────── -->
+  <div id="emptyState" style="display:none;">
+    <div class="empty-state">
+      <div class="empty-state-icon"><i class="fas fa-heartbeat"></i></div>
+      <h3>No Health Activity Yet</h3>
+      <p>Your timeline will populate as you use the platform — run a disease analysis to get started.</p>
+      <a href="{{ url_for('medix_portal.disease_detection') }}" class="btn btn-primary btn-sm">
+        <i class="fas fa-dna"></i> Run First Analysis
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// ── Icon map ──────────────────────────────────────────────
+const TYPE_ICON = {
+  prediction: 'fa-dna',
+  report:     'fa-file-medical',
+  medicine:   'fa-pills',
+  ai_doctor:  'fa-robot',
+  emergency:  'fa-exclamation-triangle',
+  vitals:     'fa-heartbeat',
+  symptom:    'fa-thermometer-half',
+};
+const TYPE_LABEL = {
+  prediction: 'Prediction',
+  report:     'Report',
+  medicine:   'Medicine',
+  ai_doctor:  'AI Doctor',
+  emergency:  'Emergency',
+  vitals:     'Vitals',
+  symptom:    'Symptom',
+};
+
+// ── Page init ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', loadTimeline);
+
+async function loadTimeline() {
+  show('loadingSkeleton');
+  hide('timelineWrap');
+  hide('emptyState');
+  hide('statsStrip');
+  hide('errorBanner');
+
+  try {
+    const res = await fetch('/api/v1/timeline?days=90', {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    });
+
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(`HTTP ${res.status}: ${txt.slice(0, 120)}`);
+    }
+
+    const data = await res.json();
+
+    hide('loadingSkeleton');
+
+    if (!data.success) {
+      showError(data.error || 'Server returned an error.');
+      return;
+    }
+
+    const entries = data.entries || [];
+
+    if (entries.length === 0) {
+      show('emptyState');
+      return;
+    }
+
+    // stats
+    const preds   = entries.filter(e => e.event_type === 'prediction').length;
+    const reports = entries.filter(e => e.event_type === 'report').length;
+    setText('statTotal',   entries.length);
+    setText('statPred',    preds);
+    setText('statReports', reports);
+    setText('statDays',    data.days || 90);
+    show('statsStrip');
+
+    renderTimeline(entries);
+    show('timelineWrap');
+
+  } catch (err) {
+    hide('loadingSkeleton');
+    showError('Failed to load timeline: ' + err.message);
+    console.error('[Timeline]', err);
+  }
+}
+
+// ── Render ────────────────────────────────────────────────
+function renderTimeline(entries) {
+  const container = document.getElementById('timeline');
+  container.innerHTML = '';
+
+  entries.forEach(entry => {
+    const type     = (entry.event_type || 'prediction').toLowerCase();
+    const severity = (entry.severity   || 'low').toLowerCase();
+    const icon     = TYPE_ICON[type]  || 'fa-circle';
+    const label    = TYPE_LABEL[type] || type.replace(/_/g, ' ');
+    const ts       = entry.timestamp || entry.created_at || null;
+    const dateStr  = ts ? fmtDate(ts) : '—';
+    const conf     = entry.confidence != null
+                   ? `Confidence: <span>${Math.round(entry.confidence * 100)}%</span>` : '';
+
+    const div = document.createElement('div');
+    div.className   = 'timeline-item';
+    div.dataset.type = type;
+
+    div.innerHTML = `
+      <div class="timeline-dot ${type}"></div>
+      <div class="timeline-line"></div>
+      <div class="timeline-card">
+        <div class="timeline-meta">
+          <span class="timeline-type ${type}">
+            <i class="fas ${icon}"></i> ${label}
+          </span>
+          <span class="timeline-date">${dateStr}</span>
+        </div>
+        <div class="timeline-title">${esc(entry.title || 'Health Event')}</div>
+        <div class="timeline-body">${esc(entry.description || entry.result || 'No details available.')}</div>
+        ${conf ? `<div class="timeline-confidence">${conf}</div>` : ''}
+        ${entry.severity
+          ? `<span class="risk-pill ${severity}">${esc(entry.severity)}</span>`
+          : ''}
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+// ── Filter ────────────────────────────────────────────────
+function filterTimeline(type, el) {
+  document.querySelectorAll('#filterBtns .btn').forEach(b => {
+    b.className = b.className.replace('btn-outline', 'btn-ghost');
+  });
+  el.className = el.className.replace('btn-ghost', 'btn-outline');
+
+  document.querySelectorAll('.timeline-item').forEach(item => {
+    item.style.display = (type === 'all' || item.dataset.type === type) ? '' : 'none';
+  });
+}
+
+// ── Helpers ───────────────────────────────────────────────
+function show(id) { const el = document.getElementById(id); if (el) el.style.display = ''; }
+function hide(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
+function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+
+function showError(msg) {
+  const banner = document.getElementById('errorBanner');
+  const txt    = document.getElementById('errorMsg');
+  if (txt) txt.textContent = msg;
+  if (banner) banner.style.display = 'flex';
+  show('emptyState');
+}
+
+function esc(str) {
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function fmtDate(raw) {
+  try {
+    const d = new Date(raw);
+    if (isNaN(d)) return raw;
+    return d.toLocaleString('en-US', {
+      year:'numeric', month:'short', day:'numeric',
+      hour:'2-digit', minute:'2-digit'
+    });
+  } catch { return raw; }
+}
+</script>
+{% endblock %}

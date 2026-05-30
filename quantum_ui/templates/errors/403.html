@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}403 — Aura MediX{% endblock %}
+{% block body %}
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;z-index:1;padding:2rem">
+  <div>
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:clamp(5rem,15vw,9rem);font-weight:700;background:linear-gradient(135deg,#7c3aed,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:1rem">403</div>
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600;color:#e2e8f0;margin-bottom:0.5rem">Access Denied</div>
+    <p style="color:#64748b;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:2rem;font-size:0.9rem">Authentication required to access this module.</p>
+    <a href="/login" style="display:inline-flex;align-items:center;gap:0.5rem;padding:11px 24px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:white;text-decoration:none;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:600">
+      <i class="fas fa-sign-in-alt"></i> Sign In
+    </a>
+  </div>
+</div>
+{% endblock %}

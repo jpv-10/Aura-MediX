@@ -1,0 +1,479 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Emergency AI — Aura MediX{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/emergency.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="emg-root">
+
+  <!-- ── Page Header ── -->
+  <div class="emg-header">
+    <div>
+      <h1 class="emg-title"><i class="fas fa-exclamation-triangle"></i> EMERGENCY AI</h1>
+      <p class="emg-subtitle">Critical response system — SOS alerts, first aid & nearest hospitals</p>
+    </div>
+    <div class="emg-live-badge">
+      <div class="emg-live-dot"></div>
+      SOS READY
+    </div>
+  </div>
+
+  <!-- ── Disclaimer ── -->
+  <div class="emg-disclaimer">
+    <i class="fas fa-shield-alt"></i>
+    <span><strong>Safety Notice:</strong> This system does not automatically contact emergency services. Buttons open your phone's dialer — you must confirm the call. In a life-threatening emergency, always call your local emergency number directly.</span>
+  </div>
+
+  <!-- ── 4 Emergency Call Buttons ── -->
+  <div class="emg-call-grid">
+    <button class="emg-call-btn ambulance" onclick="triggerSOS('108', 'Ambulance', 'fa-ambulance')">
+      <i class="fas fa-ambulance emg-btn-icon"></i>
+      <div class="emg-btn-label">AMBULANCE</div>
+      <div class="emg-btn-number">108</div>
+    </button>
+    <button class="emg-call-btn police" onclick="triggerSOS('100', 'Police', 'fa-shield-alt')">
+      <i class="fas fa-shield-alt emg-btn-icon"></i>
+      <div class="emg-btn-label">POLICE</div>
+      <div class="emg-btn-number">100</div>
+    </button>
+    <button class="emg-call-btn fire" onclick="triggerSOS('101', 'Fire Brigade', 'fa-fire')">
+      <i class="fas fa-fire emg-btn-icon"></i>
+      <div class="emg-btn-label">FIRE BRIGADE</div>
+      <div class="emg-btn-number">101</div>
+    </button>
+    <button class="emg-call-btn contact" id="callContactBtn" onclick="callEmergencyContact()">
+      <i class="fas fa-user-shield emg-btn-icon"></i>
+      <div class="emg-btn-label">MY CONTACT</div>
+      <div class="emg-btn-number" id="contactNumDisplay" style="font-size:13px">Not set</div>
+    </button>
+  </div>
+
+  <!-- ── Main Layout ── -->
+  <div class="emg-layout">
+
+    <!-- LEFT COLUMN -->
+    <div style="display:flex;flex-direction:column;gap:18px">
+
+      <!-- Live Location -->
+      <div class="emg-panel">
+        <div class="emg-panel-header"><i class="fas fa-map-marker-alt"></i> Live Location</div>
+        <div class="emg-location-card" id="locationCard">
+          <div class="emg-location-coords" id="coordsDisplay">
+            <i class="fas fa-satellite-dish" style="margin-right:8px;animation:flicker 2s infinite"></i>
+            Acquiring GPS signal…
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="emg-btn emg-btn-primary" onclick="getLocation()">
+              <i class="fas fa-location-arrow"></i> Get Location
+            </button>
+            <a class="emg-btn emg-btn-outline" id="mapsLink" href="#" target="_blank" style="display:none">
+              <i class="fas fa-external-link-alt"></i> Open Maps
+            </a>
+          </div>
+        </div>
+        <!-- Send Alert -->
+        <div>
+          <p style="font-size:13px;color:var(--color-text-muted);margin-bottom:10px">
+            Generate an emergency message with your GPS location and share it instantly.
+          </p>
+          <div class="emg-share-grid">
+            <button class="emg-btn emg-btn-green" onclick="sendViaWhatsApp()">
+              <i class="fab fa-whatsapp"></i> WhatsApp SOS
+            </button>
+            <button class="emg-btn emg-btn-amber" onclick="sendViaSMS()">
+              <i class="fas fa-sms"></i> Send SMS SOS
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- First Aid Guide -->
+      <div class="emg-panel">
+        <div class="emg-panel-header"><i class="fas fa-first-aid"></i> First Aid Quick Guide</div>
+        <div class="emg-aid-list">
+          {% set aids = [
+            ('CPR',      'fas fa-heartbeat',   '#FF6B6B', 'cpr'),
+            ('Choking',  'fas fa-lungs',        '#FFD93D', 'choking'),
+            ('Bleeding', 'fas fa-tint',         '#FF6B6B', 'bleeding'),
+            ('Burns',    'fas fa-fire',         '#FFD93D', 'burns'),
+            ('Fracture', 'fas fa-bone',         '#74B9FF', 'fracture'),
+            ('Stroke',   'fas fa-brain',        '#A29BFE', 'stroke')
+          ] %}
+          {% for name, icon, color, key in aids %}
+          <div class="emg-aid-item" onclick="showGuide('{{ key }}')">
+            <div class="emg-aid-icon" style="background:{{ color }}1a;border:1px solid {{ color }}44;color:{{ color }}">
+              <i class="{{ icon }}"></i>
+            </div>
+            <span class="emg-aid-name">{{ name }}</span>
+            <i class="fas fa-chevron-right emg-aid-chevron"></i>
+          </div>
+          {% endfor %}
+        </div>
+        <!-- Guide steps appear here -->
+        <div id="guidePanel" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,23,68,0.15)">
+          <div style="font-family:'Orbitron',monospace;font-size:11px;color:var(--emg-red);letter-spacing:0.15em;margin-bottom:10px" id="guidePanelTitle"></div>
+          <div class="emg-step-list" id="guideContent"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div style="display:flex;flex-direction:column;gap:18px">
+
+      <!-- Emergency Contact -->
+      <div class="emg-panel">
+        <div class="emg-panel-header"><i class="fas fa-user-shield"></i> Emergency Contact</div>
+        <div class="emg-contact-form">
+          <input class="emg-input" id="contactName" type="text" placeholder="Contact name (e.g. Mom)" />
+          <input class="emg-input" id="contactPhone" type="tel" placeholder="Phone number" />
+          <button class="emg-btn emg-btn-primary emg-btn-full" onclick="saveContact()">
+            <i class="fas fa-save"></i> Save Contact
+          </button>
+        </div>
+        <div id="savedContactCard" style="display:none;margin-top:12px">
+          <div class="emg-saved-contact">
+            <div>
+              <div class="emg-saved-name" id="savedName">—</div>
+              <div class="emg-saved-num"  id="savedNum">—</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="emg-btn emg-btn-primary" style="padding:8px 14px;font-size:12px" onclick="callEmergencyContact()">
+                <i class="fas fa-phone"></i>
+              </button>
+              <button class="emg-btn emg-btn-outline" style="padding:8px 12px;font-size:12px" onclick="clearContact()">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotlines -->
+      <div class="emg-panel">
+        <div class="emg-panel-header"><i class="fas fa-phone-alt"></i> Emergency Hotlines</div>
+        <div class="emg-hotline-list">
+          {% set hotlines = [
+            ('112', 'All Emergencies',   '#FF1744'),
+            ('108', 'Ambulance',         '#FF1744'),
+            ('100', 'Police',            '#74B9FF'),
+            ('101', 'Fire Brigade',      '#FFD93D'),
+            ('102', 'Women Helpline',    '#F9A8D4'),
+            ('1800-599-0019','Mental Health','#A29BFE')
+          ] %}
+          {% for num, label, color in hotlines %}
+          <a href="tel:{{ num }}" class="emg-hotline">
+            <span class="emg-hotline-label"><i class="fas fa-phone" style="margin-right:8px;color:{{ color }}"></i>{{ label }}</span>
+            <span class="emg-hotline-num" style="color:{{ color }}">{{ num }}</span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Find Hospital shortcut -->
+      <a href="{{ url_for('medix_portal.hospital_locator') }}"
+         style="display:flex;align-items:center;gap:14px;padding:18px;
+                background:rgba(41,182,246,0.06);border:1px solid rgba(41,182,246,0.2);
+                border-radius:14px;text-decoration:none;transition:all 0.18s;color:var(--emg-blue)"
+         class="lift">
+        <i class="fas fa-hospital" style="font-size:24px"></i>
+        <div>
+          <div style="font-family:'Orbitron',monospace;font-size:13px;font-weight:700;letter-spacing:0.05em">FIND NEAREST HOSPITAL</div>
+          <div style="font-size:12px;color:var(--color-text-muted);margin-top:3px">Locate emergency facilities near you</div>
+        </div>
+        <i class="fas fa-arrow-right" style="margin-left:auto"></i>
+      </a>
+
+    </div>
+  </div>
+
+</div><!-- /emg-root -->
+
+<!-- ══════════════ SOS MODAL ══════════════ -->
+<div class="emg-modal-overlay" id="sosModal" onclick="closeModal(event)">
+  <div class="emg-modal">
+    <div class="emg-modal-icon" id="modalIcon"><i class="fas fa-ambulance" id="modalIconClass"></i></div>
+    <div class="emg-modal-title">SOS ALERT</div>
+    <div class="emg-modal-service" id="modalService">Calling Ambulance…</div>
+    <div class="emg-countdown-wrap">
+      <svg width="100" height="100" viewBox="0 0 100 100">
+        <circle class="emg-countdown-track" cx="50" cy="50" r="45"/>
+        <circle class="emg-countdown-ring" id="countdownRing" cx="50" cy="50" r="45"/>
+      </svg>
+      <div class="emg-countdown-num" id="countdownNum">5</div>
+    </div>
+    <div class="emg-modal-actions">
+      <button class="emg-btn emg-btn-outline" onclick="cancelSOS()"><i class="fas fa-times"></i> CANCEL</button>
+      <button class="emg-btn emg-btn-primary" onclick="callNow()"><i class="fas fa-phone"></i> CALL NOW</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+// ═══════════════════════════════════════
+//  AURA MEDIX — Emergency JavaScript
+// ═══════════════════════════════════════
+
+// ── State ──
+let currentCallNumber = null;
+let sosTimer = null;
+let sosCountdown = 5;
+let userLat = null, userLng = null;
+
+// ── First Aid Guides ──
+const guides = {
+  cpr: {
+    title: 'CPR PROCEDURE',
+    steps: [
+      'Shake shoulders firmly, shout "Are you okay?"',
+      'Call 112 immediately — or ask bystander to call',
+      'Tilt head back gently, lift chin to open airway',
+      'Place heel of hand on center of chest (lower half of sternum)',
+      'Press down 5–6 cm, 100–120 compressions per minute',
+      'After every 30 compressions, give 2 rescue breaths',
+      'Continue until emergency services arrive or person recovers'
+    ]
+  },
+  choking: {
+    title: 'CHOKING RESPONSE',
+    steps: [
+      'Ask "Are you choking?" — if cannot speak or breathe, act immediately',
+      'Lean person forward, give 5 firm back blows between shoulder blades',
+      'If ineffective: stand behind, make fist above navel, give 5 inward-upward thrusts',
+      'Alternate 5 back blows and 5 abdominal thrusts',
+      'If person becomes unconscious, begin CPR and call 112'
+    ]
+  },
+  bleeding: {
+    title: 'CONTROLLING BLEEDING',
+    steps: [
+      'Protect yourself with gloves if available',
+      'Apply firm, direct pressure using a clean cloth or bandage',
+      'Elevate the injured limb above heart level if possible',
+      'Do NOT remove the cloth — add more material on top if it soaks through',
+      'Maintain continuous pressure for at least 15 minutes',
+      'Apply tourniquet above the wound only for life-threatening limb bleeding',
+      'Call 112 immediately for severe or arterial bleeding'
+    ]
+  },
+  burns: {
+    title: 'BURN TREATMENT',
+    steps: [
+      'Remove person from source of burn — ensure your own safety first',
+      'Cool burn immediately under cool (not cold/ice) running water for 20 minutes',
+      'Remove jewelry, watches, or tight items near the burn area',
+      'Do NOT use ice, butter, toothpaste, or any home remedies',
+      'Cover the burn loosely with cling film or a clean non-fluffy dressing',
+      'Give paracetamol or ibuprofen for pain if available',
+      'Seek emergency care for burns larger than palm size, or on face/hands/genitals'
+    ]
+  },
+  fracture: {
+    title: 'FRACTURE FIRST AID',
+    steps: [
+      'Keep the injured person still — do not try to straighten the bone',
+      'Immobilize the area using a makeshift splint (rolled newspaper, sticks)',
+      'Pad around the injury gently with clothing or soft material',
+      'Apply an ice pack wrapped in cloth to reduce swelling',
+      'Elevate the injured limb if it does not cause more pain',
+      'Check circulation below the injury (color, warmth, sensation)',
+      'Call 112 or transport carefully to emergency room'
+    ]
+  },
+  stroke: {
+    title: 'STROKE — ACT F.A.S.T.',
+    steps: [
+      'FACE — Ask to smile. Is one side drooping or uneven?',
+      'ARMS — Ask to raise both arms. Does one drift downward?',
+      'SPEECH — Ask to repeat "The sky is blue." Is speech slurred or strange?',
+      'TIME — If ANY of these signs present, call 112 IMMEDIATELY',
+      'Note the exact time symptoms started — tell paramedics',
+      'Keep the person calm, still, and lying down',
+      'Do NOT give food, water, or aspirin unless instructed by emergency services'
+    ]
+  }
+};
+
+// ── Show First Aid Guide ──
+function showGuide(key) {
+  const g = guides[key]; if (!g) return;
+  document.getElementById('guidePanelTitle').textContent = g.title;
+  document.getElementById('guideContent').innerHTML = g.steps
+    .map((s, i) => `
+      <div class="emg-step">
+        <div class="emg-step-num">${i+1}</div>
+        <div>${s}</div>
+      </div>`).join('');
+  const panel = document.getElementById('guidePanel');
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ── SOS Modal ──
+function triggerSOS(number, service, iconClass) {
+  currentCallNumber = number;
+  document.getElementById('modalService').textContent = `Calling ${service}…`;
+  document.getElementById('modalIconClass').className = `fas ${iconClass}`;
+  document.getElementById('sosModal').classList.add('open');
+  startCountdown();
+}
+
+function startCountdown() {
+  sosCountdown = 5;
+  updateCountdownUI(5);
+  clearInterval(sosTimer);
+  sosTimer = setInterval(() => {
+    sosCountdown--;
+    updateCountdownUI(sosCountdown);
+    if (sosCountdown <= 0) {
+      clearInterval(sosTimer);
+      callNow();
+    }
+  }, 1000);
+}
+
+function updateCountdownUI(n) {
+  document.getElementById('countdownNum').textContent = n;
+  // SVG ring: circumference = 2πr = 2*π*45 ≈ 283
+  const total = 283;
+  const offset = total - (total * n / 5);
+  document.getElementById('countdownRing').style.strokeDashoffset = offset;
+}
+
+function cancelSOS() {
+  clearInterval(sosTimer);
+  document.getElementById('sosModal').classList.remove('open');
+  currentCallNumber = null;
+  if (typeof showToast !== 'undefined') showToast('Emergency call cancelled.', 'info');
+}
+
+function callNow() {
+  clearInterval(sosTimer);
+  document.getElementById('sosModal').classList.remove('open');
+  if (currentCallNumber) window.location.href = `tel:${currentCallNumber}`;
+}
+
+function closeModal(e) {
+  if (e.target.id === 'sosModal') cancelSOS();
+}
+
+// ── Emergency Contact ──
+function saveContact() {
+  const name  = document.getElementById('contactName').value.trim();
+  const phone = document.getElementById('contactPhone').value.trim();
+  if (!name || !phone) {
+    if (typeof showToast !== 'undefined') showToast('Please enter both name and phone number.', 'error');
+    return;
+  }
+  localStorage.setItem('emg_contact_name', name);
+  localStorage.setItem('emg_contact_phone', phone);
+
+  // Also persist to backend
+  fetch('/emergency/contact/save', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, phone })
+  }).catch(() => {}); // silent fail — localStorage is primary
+
+  renderSavedContact(name, phone);
+  if (typeof showToast !== 'undefined') showToast(`Contact saved: ${name}`, 'success');
+}
+
+function renderSavedContact(name, phone) {
+  document.getElementById('savedName').textContent = name;
+  document.getElementById('savedNum').textContent  = phone;
+  document.getElementById('savedContactCard').style.display = 'block';
+  document.getElementById('contactNumDisplay').textContent = phone;
+}
+
+function clearContact() {
+  localStorage.removeItem('emg_contact_name');
+  localStorage.removeItem('emg_contact_phone');
+  document.getElementById('savedContactCard').style.display = 'none';
+  document.getElementById('contactNumDisplay').textContent = 'Not set';
+  document.getElementById('contactName').value  = '';
+  document.getElementById('contactPhone').value = '';
+  if (typeof showToast !== 'undefined') showToast('Contact cleared.', 'info');
+}
+
+function callEmergencyContact() {
+  const phone = localStorage.getItem('emg_contact_phone');
+  if (!phone) {
+    if (typeof showToast !== 'undefined') showToast('No emergency contact saved yet.', 'error');
+    return;
+  }
+  triggerSOS(phone, localStorage.getItem('emg_contact_name') || 'Emergency Contact', 'fa-user-shield');
+}
+
+// ── Geolocation ──
+function getLocation() {
+  if (!navigator.geolocation) {
+    if (typeof showToast !== 'undefined') showToast('Geolocation not supported by your browser.', 'error');
+    return;
+  }
+  document.getElementById('coordsDisplay').innerHTML =
+    '<i class="fas fa-spinner fa-spin" style="margin-right:8px"></i> Locating…';
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      userLat = pos.coords.latitude.toFixed(6);
+      userLng = pos.coords.longitude.toFixed(6);
+      document.getElementById('coordsDisplay').innerHTML =
+        `<i class="fas fa-satellite-dish" style="margin-right:8px;color:var(--emg-red)"></i>
+         LAT: <strong>${userLat}</strong> &nbsp; LNG: <strong>${userLng}</strong><br>
+         <small style="color:var(--color-text-muted)">Accuracy: ±${Math.round(pos.coords.accuracy)}m</small>`;
+      const mapsLink = document.getElementById('mapsLink');
+      mapsLink.href  = `https://maps.google.com/?q=${userLat},${userLng}`;
+      mapsLink.style.display = 'inline-flex';
+    },
+    err => {
+      document.getElementById('coordsDisplay').innerHTML =
+        '<i class="fas fa-exclamation-circle" style="margin-right:8px;color:#FFB300"></i> Could not get location.';
+      if (typeof showToast !== 'undefined') showToast('Location permission denied.', 'error');
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}
+
+function buildAlertMessage() {
+  const name = localStorage.getItem('emg_contact_name') || 'Someone';
+  if (userLat && userLng) {
+    return `🚨 EMERGENCY! I need immediate help!\n\nMy current location:\nhttps://maps.google.com/?q=${userLat},${userLng}\n\nPlease call emergency services or come immediately.\n— Sent via Aura MediX`;
+  }
+  return `🚨 EMERGENCY! I need immediate help!\n\nI do not have GPS signal. Please call me or contact emergency services.\n— Sent via Aura MediX`;
+}
+
+function sendViaWhatsApp() {
+  const msg = encodeURIComponent(buildAlertMessage());
+  window.open(`https://wa.me/?text=${msg}`, '_blank');
+}
+
+function sendViaSMS() {
+  const msg = encodeURIComponent(buildAlertMessage());
+  window.location.href = `sms:?body=${msg}`;
+}
+
+// ── On load — restore saved contact ──
+(function init() {
+  const name  = localStorage.getItem('emg_contact_name');
+  const phone = localStorage.getItem('emg_contact_phone');
+  if (name && phone) renderSavedContact(name, phone);
+  // Auto-get location silently
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      userLat = pos.coords.latitude.toFixed(6);
+      userLng = pos.coords.longitude.toFixed(6);
+      document.getElementById('coordsDisplay').innerHTML =
+        `<i class="fas fa-satellite-dish" style="margin-right:8px;color:var(--emg-red)"></i>
+         LAT: <strong>${userLat}</strong> &nbsp; LNG: <strong>${userLng}</strong>`;
+      const mapsLink = document.getElementById('mapsLink');
+      mapsLink.href  = `https://maps.google.com/?q=${userLat},${userLng}`;
+      mapsLink.style.display = 'inline-flex';
+    }, () => {}, { timeout: 5000 });
+  }
+})();
+</script>
+{% endblock %}

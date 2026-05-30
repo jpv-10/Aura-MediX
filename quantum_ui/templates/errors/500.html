@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}500 - Server Error{% endblock %}
+
+{% block content %}
+<div class="error-page">
+    <div class="error-content">
+        <h1 class="error-code">500</h1>
+        <h2 class="error-title">Server Error</h2>
+        <p class="error-message">Something went wrong on our end. Our team has been notified.</p>
+        <a href="{{ url_for('medix_portal.landing') }}" class="btn btn-primary">Back to Home</a>
+    </div>
+</div>
+
+<style>
+.error-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.error-content {
+    text-align: center;
+    background: white;
+    padding: 60px 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.error-code {
+    font-size: 5em;
+    color: #e74c3c;
+    margin: 0;
+}
+
+.error-title {
+    font-size: 2em;
+    color: #333;
+    margin: 20px 0;
+}
+
+.error-message {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+</style>
+{% endblock %}

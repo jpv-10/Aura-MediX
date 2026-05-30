@@ -1,0 +1,179 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Medical Reports — Aura MediX{% endblock %}
+{% block head %}
+<style>
+.reports-table { width:100%; border-collapse:collapse; }
+.reports-table th { padding:10px 16px; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); border-bottom:1px solid var(--border-hover); text-align:left; white-space:nowrap; }
+.reports-table td { padding:14px 16px; border-bottom:1px solid var(--border); font-size:14px; color:var(--text-secondary); vertical-align:middle; }
+.reports-table tr:last-child td { border-bottom:none; }
+.reports-table tr:hover td { background:rgba(255,255,255,0.02); }
+.type-badge { padding:3px 10px; border-radius:var(--r-full); font-size:11px; font-weight:600; background:var(--color-primary-light); color:#A78BFA; border:1px solid var(--color-primary-border); text-transform:uppercase; }
+.risk-pill { padding:4px 10px; border-radius:var(--r-full); font-size:12px; font-weight:600; }
+.risk-pill.low      { background:rgba(52,211,153,0.12); color:#34D399; }
+.risk-pill.medium   { background:rgba(251,191,36,0.12);  color:#FBBF24; }
+.risk-pill.high     { background:rgba(248,113,113,0.12); color:#F87171; }
+.risk-pill.critical { background:rgba(239,68,68,0.18);   color:#EF4444; }
+.status-pill { padding:4px 10px; border-radius:var(--r-full); font-size:12px; font-weight:600; }
+.status-pill.ready      { background:rgba(52,211,153,0.12); color:#34D399; }
+.status-pill.processing { background:rgba(251,191,36,0.12);  color:#FBBF24; }
+.action-btn { padding:6px 12px; border-radius:var(--r-sm); font-size:13px; border:1px solid var(--border); color:var(--text-secondary); text-decoration:none; margin-right:6px; transition:border-color 200ms; cursor:pointer; background:transparent; }
+.action-btn:hover { border-color:var(--color-primary-border); color:var(--text-primary); }
+.filter-tabs { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+.filter-tab { padding:7px 16px; border-radius:var(--r-full); border:1px solid var(--border); background:rgba(255,255,255,0.03); color:var(--text-muted); cursor:pointer; font-size:13px; transition:all 200ms; }
+.filter-tab.active, .filter-tab:hover { border-color:var(--color-primary-border); color:#A78BFA; background:var(--color-primary-light); }
+.report-types-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:20px; }
+.report-type-card { padding:20px; border-radius:var(--r-md); border:1px solid var(--border); background:rgba(255,255,255,0.02); cursor:pointer; transition:var(--t); text-align:center; }
+.report-type-card:hover, .report-type-card.active { border-color:var(--color-primary-border); background:var(--color-primary-light); }
+.report-type-card i { font-size:22px; margin-bottom:8px; display:block; color:#A78BFA; }
+.rt-name { font-weight:600; color:var(--text-primary); font-size:14px; margin-bottom:4px; font-family:var(--f-head); }
+.rt-desc { font-size:12px; color:var(--text-muted); }
+.empty-state { text-align:center; padding:48px 24px; color:var(--text-muted); }
+.empty-state i { font-size:40px; opacity:0.3; display:block; margin-bottom:12px; }
+.empty-state p { font-size:14px; }
+@media(max-width:768px){ .report-types-grid{grid-template-columns:1fr} }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="module-wrapper">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Medical <span>Reports</span></h1>
+      <p class="page-subtitle">AI-generated health reports and medical documentation</p>
+    </div>
+    <button class="btn btn-primary" onclick="showGenerateModal()">
+      <i class="fas fa-plus"></i> Generate New Report
+    </button>
+  </div>
+
+  <!-- Generate panel -->
+  <div class="panel-card" style="margin-bottom:20px">
+    <div class="panel-header"><i class="fas fa-file-medical"></i> Generate AI Report</div>
+    <div class="report-types-grid">
+      <div class="report-type-card active" onclick="selectType('health_summary',this)">
+        <i class="fas fa-heartbeat"></i>
+        <div class="rt-name">Health Summary</div>
+        <div class="rt-desc">Complete health overview with vitals and AI analysis</div>
+      </div>
+      <div class="report-type-card" onclick="selectType('vitals',this)">
+        <i class="fas fa-chart-line"></i>
+        <div class="rt-name">Vitals Report</div>
+        <div class="rt-desc">Detailed vital signs history and trends</div>
+      </div>
+      <div class="report-type-card" onclick="selectType('risk_assessment',this)">
+        <i class="fas fa-shield-alt"></i>
+        <div class="rt-name">Risk Assessment</div>
+        <div class="rt-desc">Disease risk analysis and prevention plan</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="generateBtn" onclick="generateReport()" style="width:100%">
+      <i class="fas fa-download"></i> Download PDF Report
+    </button>
+  </div>
+
+  <!-- Filter tabs -->
+  <div class="filter-tabs" id="filterTabs">
+    <button class="filter-tab active" data-filter="all" onclick="filterReports('all',this)">All Reports</button>
+    <button class="filter-tab" data-filter="disease_prediction" onclick="filterReports('disease_prediction',this)">Disease Predictions</button>
+    <button class="filter-tab" data-filter="vitals" onclick="filterReports('vitals',this)">Vitals</button>
+  </div>
+
+  <!-- Reports table -->
+  <div class="panel-card" style="padding:0;overflow:hidden">
+    <div style="overflow-x:auto">
+      <table class="reports-table">
+        <thead>
+          <tr>
+            <th>Report</th>
+            <th>Type</th>
+            <th>Date</th>
+            <th>Disease</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="reportsTbody">
+          {% if records %}
+            {% for record in records %}
+            <tr class="report-row" data-type="{{ record.report_type or 'report' }}">
+              <td style="font-weight:600;color:var(--text-primary)">{{ record.title or 'Medical Report' }}</td>
+              <td><span class="type-badge">{{ (record.report_type or 'report').replace('_',' ').title() }}</span></td>
+              <td>{{ record.created_at.strftime('%d %b %Y') if record.created_at else '—' }}</td>
+              <td>{{ record.disease_name or '—' }}</td>
+              <td><span class="status-pill ready">Ready</span></td>
+              <td>
+                <button class="action-btn" onclick="downloadReportPDF({{ record.id }})"><i class="fas fa-download"></i> PDF</button>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="6">
+                <div class="empty-state">
+                  <i class="fas fa-folder-open"></i>
+                  <p>No reports yet. Generate your first AI health report above.</p>
+                </div>
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let selectedReportType = 'health_summary';
+
+function selectType(type, el) {
+  selectedReportType = type;
+  document.querySelectorAll('.report-type-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function filterReports(filter, el) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.report-row').forEach(row => {
+    row.style.display = (filter === 'all' || row.dataset.type === filter) ? '' : 'none';
+  });
+}
+
+async function generateReport() {
+  const btn = document.getElementById('generateBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Generating…';
+  try {
+    const res = await fetch('/api/v1/reports/download?report_type=' + selectedReportType);
+    if (res.ok) {
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'AuraMediX_Report_' + new Date().getTime() + '.pdf';
+      a.click();
+      URL.revokeObjectURL(url);
+      if (typeof showToast !== 'undefined') showToast('Report downloaded successfully', 'success');
+    } else {
+      throw new Error('Report generation failed');
+    }
+  } catch (e) {
+    if (typeof showToast !== 'undefined') showToast(e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-download"></i> Download PDF Report';
+  }
+}
+
+function downloadReportPDF(reportId) {
+  window.location.href = '/api/v1/reports/download?report_type=health_summary';
+}
+
+function showGenerateModal() {
+  // Scroll to generate panel
+  document.querySelector('.panel-card').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+{% endblock %}

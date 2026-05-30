@@ -1,0 +1,23 @@
+{
+  "platform": "MEDI AI NEXUS v2.1.0",
+  "models": [
+    {
+      "name": "Diabetes Predictor",
+      "algorithm": "Random Forest",
+      "features": 8,
+      "status": "trained"
+    },
+    {
+      "name": "Heart Disease Predictor",
+      "algorithm": "Gradient Boosting",
+      "features": 10,
+      "status": "trained"
+    },
+    {
+      "name": "Hypertension Predictor",
+      "algorithm": "Random Forest",
+      "features": 7,
+      "status": "trained"
+    }
+  ]
+}

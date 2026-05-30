@@ -1,0 +1,392 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   AURA MEDIX — Animations & Keyframes v6.0 PREMIUM
+   GPU-composited only · 200–400ms UI · 20–40s ambient loops
+   Zero layout thrash · Will-change budget maintained
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ╔══════════════════════════════════════════════════════════════════════╗
+   ║  AMBIENT BACKGROUND KEYFRAMES                                       ║
+   ╚══════════════════════════════════════════════════════════════════════╝ */
+
+/* Orb drift — three unique paths, very slow, looping ──────────────────── */
+@keyframes orb-drift-1 {
+  0%   { transform: translate(0px, 0px)   scale(1.00); }
+  20%  { transform: translate(48px, 22px)  scale(1.04); }
+  40%  { transform: translate(72px, -18px) scale(0.97); }
+  60%  { transform: translate(28px, 52px)  scale(1.06); }
+  80%  { transform: translate(-22px, 36px) scale(0.98); }
+  100% { transform: translate(0px, 0px)   scale(1.00); }
+}
+@keyframes orb-drift-2 {
+  0%   { transform: translate(0px, 0px)    scale(1.00); }
+  25%  { transform: translate(-52px, -32px) scale(1.05); }
+  50%  { transform: translate(34px, -60px)  scale(0.95); }
+  75%  { transform: translate(-28px, 44px)  scale(1.03); }
+  100% { transform: translate(0px, 0px)    scale(1.00); }
+}
+@keyframes orb-drift-3 {
+  0%   { transform: translate(0px, 0px)   scale(1.00); }
+  30%  { transform: translate(60px, -40px) scale(1.07); }
+  60%  { transform: translate(-40px, 20px) scale(0.94); }
+  100% { transform: translate(0px, 0px)   scale(1.00); }
+}
+@keyframes orb-drift-4 {
+  0%   { transform: translate(0, 0) scale(1); opacity: 0.12; }
+  33%  { transform: translate(38px, -55px) scale(1.08); opacity: 0.18; }
+  66%  { transform: translate(-50px, 30px) scale(0.93); opacity: 0.10; }
+  100% { transform: translate(0, 0) scale(1); opacity: 0.12; }
+}
+
+/* Gradient shimmer drift — slow horizontal sweep ───────────────────────── */
+@keyframes gradient-drift {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+
+/* Light sweep — diagonal ray that slides across the panel once in a while */
+@keyframes light-sweep {
+  0%   { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateX(340%) skewX(-18deg); opacity: 0; }
+}
+
+/* Grid pulse — the background grid subtly breathes ─────────────────────── */
+@keyframes grid-breathe {
+  0%,100% { opacity: 0.55; }
+  50%      { opacity: 0.85; }
+}
+
+/* Vignette pulse ────────────────────────────────────────────────────────── */
+@keyframes vignette-pulse {
+  0%,100% { opacity: 0.5; }
+  50%      { opacity: 0.75; }
+}
+
+/* ╔══════════════════════════════════════════════════════════════════════╗
+   ║  UI / PAGE KEYFRAMES                                                ║
+   ╚══════════════════════════════════════════════════════════════════════╝ */
+
+@keyframes fadeIn       { from { opacity:0; }                           to { opacity:1; } }
+@keyframes slideUp      { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+@keyframes slideDown    { from { opacity:0; transform:translateY(-14px);} to { opacity:1; transform:translateY(0); } }
+@keyframes slideInRight { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+@keyframes scaleIn      { from { opacity:0; transform:scale(0.94);      } to { opacity:1; transform:scale(1);    } }
+
+/* Spinner / loader ───────────────────────────────────────────────────────── */
+@keyframes spin      { to   { transform:rotate(360deg); } }
+@keyframes spin-slow { from { transform:rotate(0deg);   } to { transform:rotate(360deg); } }
+
+/* Shimmer (skeleton loader) ─────────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* Float — gentle vertical bob ───────────────────────────────────────────── */
+@keyframes float-y {
+  0%,100% { transform:translateY(0);   }
+  50%     { transform:translateY(-9px);}
+}
+
+/* Pulse dot (status indicator) ──────────────────────────────────────────── */
+@keyframes pulse-dot {
+  0%,100% { opacity:1;   transform:scale(1);   }
+  50%     { opacity:0.5; transform:scale(0.78);}
+}
+
+/* Typing animation ──────────────────────────────────────────────────────── */
+@keyframes typing-bounce {
+  0%,80%,100% { transform:translateY(0);  opacity:0.4; }
+  40%         { transform:translateY(-6px); opacity:1; }
+}
+
+/* Ripple (button press) ─────────────────────────────────────────────────── */
+@keyframes ripple-anim { to { transform:scale(2.5); opacity:0; } }
+
+/* Glow pulse (icon / accent elements) ───────────────────────────────────── */
+@keyframes glow-pulse {
+  0%,100% { box-shadow: 0 0 12px rgba(124,58,237,0.18), 0 0 0 rgba(124,58,237,0); }
+  50%     { box-shadow: 0 0 28px rgba(124,58,237,0.38), 0 0 6px rgba(124,58,237,0.15); }
+}
+
+/* Status dot online ring expand ─────────────────────────────────────────── */
+@keyframes ring-expand {
+  0%   { transform:scale(1);   opacity:0.6; }
+  100% { transform:scale(2.4); opacity:0;   }
+}
+
+/* ╔══════════════════════════════════════════════════════════════════════╗
+   ║  UTILITY CLASSES                                                    ║
+   ╚══════════════════════════════════════════════════════════════════════╝ */
+
+.anim-fade-in   { animation: fadeIn       0.30s ease-out forwards; }
+.anim-slide-up  { animation: slideUp      0.35s cubic-bezier(0.16,1,0.3,1) forwards; }
+.anim-slide-down{ animation: slideDown    0.30s cubic-bezier(0.16,1,0.3,1) forwards; }
+.anim-scale-in  { animation: scaleIn      0.28s cubic-bezier(0.16,1,0.3,1) forwards; }
+.anim-float     { animation: float-y      5s ease-in-out infinite; }
+.spin           { animation: spin         0.85s linear infinite; }
+.spin-slow      { animation: spin-slow    6s   linear infinite; }
+.anim-glow      { animation: glow-pulse   2.8s ease-in-out infinite; }
+
+/* ── Stagger delays ──────────────────────────────────────────────────── */
+.stagger-1,.d1 { animation-delay:0.05s; }
+.stagger-2,.d2 { animation-delay:0.10s; }
+.stagger-3,.d3 { animation-delay:0.15s; }
+.stagger-4,.d4 { animation-delay:0.20s; }
+.stagger-5,.d5 { animation-delay:0.25s; }
+.stagger-6,.d6 { animation-delay:0.30s; }
+.d7            { animation-delay:0.35s; }
+.d8            { animation-delay:0.40s; }
+
+/* ╔══════════════════════════════════════════════════════════════════════╗
+   ║  PREMIUM BACKGROUND SYSTEM — Mesh + Orbs + Grid + Vignette         ║
+   ╚══════════════════════════════════════════════════════════════════════╝ */
+
+/* Canvas particle layer */
+#app-particles {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+
+/* ── Mesh background wrapper ─────────────────────────────────────────── */
+.mesh-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ── Base radial fog ─────────────────────────────────────────────────── */
+.mesh-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 90% 70% at 18% 18%, rgba(124,58,237,0.12) 0%, transparent 58%),
+    radial-gradient(ellipse 70% 90% at 84% 84%, rgba(45,212,191,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 60% at 50% 55%, rgba(96,165,250,0.03) 0%, transparent 60%);
+}
+
+.mesh-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 12% 16%, rgba(255,255,255,0.18) 0%, transparent 1.6%),
+    radial-gradient(circle at 28% 70%, rgba(167,139,250,0.12) 0%, transparent 1.5%),
+    radial-gradient(circle at 68% 22%, rgba(6,214,240,0.14) 0%, transparent 1.8%),
+    radial-gradient(circle at 84% 62%, rgba(236,72,153,0.10) 0%, transparent 1.4%);
+  background-repeat: no-repeat;
+  background-blend-mode: screen;
+  opacity: 0.75;
+}
+
+/* ── Animated mesh grid ───────────────────────────────────────────────── */
+.mesh-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(124,58,237,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 80% 65% at 50% 38%, black 5%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 65% at 50% 38%, black 5%, transparent 75%);
+  animation: grid-breathe 18s ease-in-out infinite;
+  will-change: opacity;
+}
+
+/* ── Floating orbs ───────────────────────────────────────────────────── */
+.mesh-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Primary orb — upper left, large soft violet */
+.mo-1 {
+  width: 780px; height: 780px;
+  background: radial-gradient(circle at 35% 40%,
+    rgba(124,58,237,0.18) 0%,
+    rgba(124,58,237,0.08) 35%,
+    transparent 70%);
+  top: -18%; left: -12%;
+  filter: blur(110px);
+  animation: orb-drift-1 32s ease-in-out infinite;
+}
+
+/* Secondary orb — lower right, medium violet */
+.mo-2 {
+  width: 620px; height: 620px;
+  background: radial-gradient(circle at 60% 55%,
+    rgba(147,51,234,0.12) 0%,
+    rgba(124,58,237,0.06) 40%,
+    transparent 70%);
+  top: 42%; right: -14%;
+  filter: blur(90px);
+  animation: orb-drift-2 38s ease-in-out infinite;
+}
+
+/* Tertiary orb — lower centre, blue tinge */
+.mo-3 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle at 50% 50%,
+    rgba(96,165,250,0.07) 0%,
+    rgba(124,58,237,0.05) 40%,
+    transparent 70%);
+  bottom: -10%; left: 32%;
+  filter: blur(80px);
+  animation: orb-drift-3 42s ease-in-out infinite;
+}
+
+/* Quaternary orb — upper right, pink accent (very subtle) */
+.mo-4 {
+  width: 440px; height: 440px;
+  background: radial-gradient(circle at 50% 50%,
+    rgba(236,72,153,0.06) 0%,
+    transparent 65%);
+  top: 6%; right: 5%;
+  filter: blur(100px);
+  opacity: 0.12;
+  animation: orb-drift-4 26s ease-in-out infinite;
+}
+
+/* ── Depth vignette — edges darken the page corners ─────────────────── */
+.mesh-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(ellipse 100% 100% at 50% 50%,
+    transparent 30%,
+    rgba(13,11,20,0.28) 65%,
+    rgba(13,11,20,0.70) 100%
+  );
+  animation: vignette-pulse 22s ease-in-out infinite;
+  will-change: opacity;
+}
+
+/* ── Topbar ambient glow line ────────────────────────────────────────── */
+.top-glow-line {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(124,58,237,0.0) 15%,
+    rgba(167,139,250,0.6) 40%,
+    rgba(236,72,153,0.4)  60%,
+    rgba(167,139,250,0.6) 80%,
+    transparent 100%
+  );
+  background-size: 200% auto;
+  animation: gradient-drift 8s ease-in-out infinite;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* ── Light sweep over sidebar ────────────────────────────────────────── */
+.side-nav::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(167,139,250,0.04) 50%,
+    transparent 60%
+  );
+  pointer-events: none;
+  animation: light-sweep 18s cubic-bezier(0.4,0,0.6,1) infinite;
+  will-change: transform;
+}
+
+/* ── Panel card accent line already in design-system; ensure premium glow */
+.panel-card::before {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(124,58,237,0.5) 30%,
+    rgba(236,72,153,0.3) 60%,
+    transparent 100%
+  );
+  animation: gradient-drift 10s ease-in-out infinite;
+  background-size: 200% auto;
+}
+
+/* ── Status dot pulse ring ───────────────────────────────────────────── */
+.s-dot { position: relative; }
+.s-dot::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1px solid rgba(16,185,129,0.6);
+  animation: ring-expand 2.4s ease-out infinite;
+}
+
+/* ── Sidebar glass upgrade ───────────────────────────────────────────── */
+.side-nav {
+  background: rgba(10,8,18,0.92) !important;
+  backdrop-filter: blur(28px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(160%) !important;
+  border-right: 1px solid rgba(124,58,237,0.12) !important;
+  box-shadow: 4px 0 40px rgba(0,0,0,0.40), inset -1px 0 0 rgba(124,58,237,0.08);
+}
+
+/* ── Topbar glass upgrade ────────────────────────────────────────────── */
+.top-nav {
+  background: rgba(10,8,18,0.82) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+  border-bottom: 1px solid rgba(124,58,237,0.10) !important;
+  box-shadow: 0 1px 0 rgba(124,58,237,0.08), 0 8px 40px rgba(0,0,0,0.30);
+}
+
+/* ── Sidebar active item — glowing left bar ──────────────────────────── */
+.s-item.active::before {
+  box-shadow: 0 0 10px rgba(167,139,250,0.8), 0 0 20px rgba(124,58,237,0.4) !important;
+  width: 3px !important;
+}
+
+/* ── Nav icon button hover glow ──────────────────────────────────────── */
+.nav-icon-btn:hover {
+  box-shadow: 0 0 16px rgba(124,58,237,0.25) !important;
+}
+
+/* ── Sidebar brand icon pulse ────────────────────────────────────────── */
+.s-brand-icon, .nav-brand-mark {
+  animation: glow-pulse 3.5s ease-in-out infinite;
+}
+
+/* ── Notification dot badge ──────────────────────────────────────────── */
+.notif-dot {
+  animation: glow-pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(239,68,68,0.5) !important;
+}
+
+/* ── Main content area z-layering ────────────────────────────────────── */
+.main-wrap { z-index: 5; position: relative; }
+
+/* ── Card hover — subtle depth lift with glow ────────────────────────── */
+.card:hover {
+  box-shadow:
+    0 0 0 1px rgba(124,58,237,0.20),
+    0 8px 32px rgba(0,0,0,0.50),
+    0 0 40px rgba(124,58,237,0.08) !important;
+}
+
+/* ── Reduce motion support ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .mesh-orb, .mesh-grid, .mesh-vignette, .s-brand-icon, .nav-brand-mark,
+  .notif-dot, .top-glow-line, .s-dot::after, .panel-card::before,
+  .side-nav::after { animation: none !important; }
+}

@@ -1,0 +1,72 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   HEALTHAI NEXUS — Dashboard Page Styles v5.0
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Profile Grid ────────────────────────────────────────────────────── */
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+.profile-stat {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md); padding: 14px;
+  transition: var(--t);
+}
+.profile-stat:hover { border-color: var(--color-border-hover); }
+.ps-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--color-text-muted); margin-bottom: 6px;
+}
+.ps-val { font-family: var(--f-head); font-size: 16px; font-weight: 700; color: var(--color-text-primary); }
+.ps-val span { font-size: 11px; color: var(--color-text-muted); }
+
+/* ── Chart period buttons ────────────────────────────────────────────── */
+.chart-period.active {
+  background: var(--color-primary-dim);
+  color: #A78BFA;
+  border-color: var(--color-primary-border);
+}
+
+/* ── Activity feed ───────────────────────────────────────────────────── */
+.act-feed { display: flex; flex-direction: column; gap: 12px; }
+.act-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 8px 0; border-bottom: 1px solid var(--color-border);
+}
+.act-item:last-child { border-bottom: none; }
+.act-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+.act-dot.purple { background: #A78BFA; box-shadow: 0 0 6px #A78BFA; }
+.act-dot.green  { background: #34D399; box-shadow: 0 0 6px #34D399; }
+.act-dot.pink   { background: #F472B6; box-shadow: 0 0 6px #F472B6; }
+.act-dot.amber  { background: #FCD34D; box-shadow: 0 0 6px #FCD34D; }
+.act-text { font-size: 13px; color: var(--color-text-secondary); }
+.act-time { font-size: 11px; color: var(--color-text-muted); margin-top: 2px; }
+
+/* ── AI Insights panel ───────────────────────────────────────────────── */
+.insight-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid var(--color-border);
+}
+.insight-item:last-child { border-bottom: none; }
+.insight-icon {
+  width: 34px; height: 34px; border-radius: var(--r-sm); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 13px;
+  background: var(--color-primary-dim); color: #A78BFA;
+  border: 1px solid var(--color-primary-border);
+}
+.insight-text { font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; }
+.insight-conf { font-size: 11px; color: var(--color-text-muted); margin-top: 3px; }
+.insight-conf span { color: #A78BFA; font-weight: 600; }
+
+/* ── Ambient orbs (dashboard only) ──────────────────────────────────── */
+.orb { position: fixed; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0; }
+.orb-a { width: 500px; height: 500px; background: radial-gradient(circle,rgba(124,58,237,0.07),transparent 70%); top: -10%; left: 20%; animation: orb-drift-1 30s ease-in-out infinite; }
+.orb-b { width: 400px; height: 400px; background: radial-gradient(circle,rgba(236,72,153,0.05),transparent 70%); bottom: 10%; right: 10%; animation: orb-drift-2 36s ease-in-out infinite; }
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .nav-search { display: none; }
+}

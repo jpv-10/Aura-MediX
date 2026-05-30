@@ -1,0 +1,3 @@
+/* ── AI Doctor page overrides ─────────────────────────────────────────── */
+.chat-wrap { height: calc(100vh - var(--topnav-h) - 48px - 56px); }
+@media (max-width: 768px) { .chat-wrap { height: auto; min-height: 500px; } }

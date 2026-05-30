@@ -1,0 +1,407 @@
+/* ═══════════════════════════════════════════
+   AURA MEDIX — Emergency System CSS
+   File: static/css/emergency.css
+   ═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+/* ── Emergency page root ── */
+.emg-root {
+  --emg-red: #FF1744;
+  --emg-red-dim: rgba(255,23,68,0.12);
+  --emg-red-glow: rgba(255,23,68,0.4);
+  --emg-red-border: rgba(255,23,68,0.3);
+  --emg-amber: #FFB300;
+  --emg-blue: #29B6F6;
+  --emg-green: #00E676;
+  --emg-purple: #CE93D8;
+  --emg-glass: rgba(255,255,255,0.04);
+  --emg-glass-border: rgba(255,255,255,0.08);
+  --emg-surface: rgba(10,10,20,0.85);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* ── Pulse animation for SOS badge ── */
+@keyframes sos-pulse {
+  0%,100% { box-shadow: 0 0 0 0 var(--emg-red-glow); opacity:1; }
+  50%      { box-shadow: 0 0 0 12px transparent; opacity:0.8; }
+}
+@keyframes radar-ping {
+  0%   { transform: scale(1); opacity:0.8; }
+  100% { transform: scale(2.2); opacity:0; }
+}
+@keyframes countdown-spin {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: 157; }
+}
+@keyframes flicker {
+  0%,100% { opacity:1; } 45%,55% { opacity:0.85; }
+}
+@keyframes slide-up {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes glow-breathe {
+  0%,100% { box-shadow: 0 0 20px var(--emg-red-glow), 0 0 40px rgba(255,23,68,0.15); }
+  50%      { box-shadow: 0 0 35px var(--emg-red-glow), 0 0 70px rgba(255,23,68,0.25); }
+}
+
+/* ── Page header ── */
+.emg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  animation: slide-up 0.4s ease;
+}
+.emg-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--emg-red);
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 20px var(--emg-red-glow);
+  animation: flicker 4s infinite;
+}
+.emg-subtitle { font-size:13px; color:var(--color-text-muted); margin-top:4px; }
+.emg-live-badge {
+  display: flex; align-items: center; gap:8px;
+  background: var(--emg-red-dim);
+  border: 1px solid var(--emg-red-border);
+  border-radius: 99px; padding: 6px 14px;
+  font-size: 12px; font-weight: 700; color: var(--emg-red);
+  font-family: 'Orbitron', monospace; letter-spacing: 0.1em;
+  animation: sos-pulse 2s infinite;
+}
+.emg-live-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--emg-red);
+  position: relative;
+}
+.emg-live-dot::after {
+  content:''; position:absolute; inset:0; border-radius:50%;
+  background: var(--emg-red);
+  animation: radar-ping 1.5s infinite;
+}
+
+/* ── Disclaimer banner ── */
+.emg-disclaimer {
+  background: rgba(255,183,0,0.08);
+  border: 1px solid rgba(255,183,0,0.25);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 12px; color: #FFB300;
+  animation: slide-up 0.5s ease;
+}
+.emg-disclaimer i { font-size: 16px; flex-shrink:0; }
+
+/* ── Main call buttons grid ── */
+.emg-call-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+  animation: slide-up 0.5s ease;
+}
+@media (max-width: 900px) { .emg-call-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 500px)  { .emg-call-grid { grid-template-columns: 1fr 1fr; } }
+
+.emg-call-btn {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px; padding: 28px 16px;
+  border-radius: 16px; cursor: pointer;
+  border: none; text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  backdrop-filter: blur(12px);
+}
+.emg-call-btn:hover  { transform: translateY(-4px) scale(1.02); }
+.emg-call-btn:active { transform: scale(0.97); }
+.emg-call-btn::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.07), transparent 60%);
+  pointer-events:none;
+}
+
+.emg-call-btn.ambulance {
+  background: linear-gradient(145deg, #C62828, #FF1744);
+  box-shadow: 0 8px 32px rgba(255,23,68,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+  animation: glow-breathe 3s infinite;
+}
+.emg-call-btn.police {
+  background: linear-gradient(145deg, #1565C0, #1E88E5);
+  box-shadow: 0 8px 32px rgba(30,136,229,0.35), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.emg-call-btn.fire {
+  background: linear-gradient(145deg, #E65100, #FF6D00);
+  box-shadow: 0 8px 32px rgba(255,109,0,0.35), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.emg-call-btn.contact {
+  background: var(--emg-glass);
+  border: 2px solid var(--emg-red-border);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  color: var(--emg-red);
+}
+.emg-call-btn.contact .emg-btn-icon { color: var(--emg-red); }
+
+.emg-btn-icon { font-size: 30px; color: #fff; }
+.emg-btn-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 13px; font-weight: 700;
+  color: #fff; letter-spacing: 0.05em;
+  text-align: center;
+}
+.emg-btn-number {
+  font-size: 20px; font-weight: 900;
+  font-family: 'Orbitron', monospace;
+  color: rgba(255,255,255,0.9);
+}
+.emg-call-btn.contact .emg-btn-label,
+.emg-call-btn.contact .emg-btn-number { color: var(--emg-red); }
+
+/* ── Two-column layout ── */
+.emg-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+@media (max-width: 1024px) { .emg-layout { grid-template-columns: 1fr; } }
+
+/* ── Glass panel ── */
+.emg-panel {
+  background: var(--emg-glass);
+  border: 1px solid var(--emg-glass-border);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(16px);
+  animation: slide-up 0.6s ease;
+}
+.emg-panel-header {
+  font-family: 'Orbitron', monospace;
+  font-size: 12px; font-weight: 700;
+  color: var(--emg-red); letter-spacing: 0.15em;
+  text-transform: uppercase; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--emg-red-dim);
+}
+
+/* ── Location card ── */
+.emg-location-card {
+  background: rgba(255,23,68,0.05);
+  border: 1px solid var(--emg-red-border);
+  border-radius: 12px; padding: 16px; margin-bottom: 14px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.emg-location-coords {
+  font-family: 'Orbitron', monospace;
+  font-size: 13px; color: var(--emg-red);
+  margin-bottom: 10px; line-height: 1.8;
+}
+.emg-loc-row { display:flex; justify-content:space-between; align-items:center; }
+.emg-loc-label { font-size:11px; color:var(--color-text-muted); text-transform:uppercase; letter-spacing:0.1em; }
+.emg-loc-val   { font-size:13px; color:var(--color-text-primary); font-weight:600; }
+
+/* ── Buttons (secondary) ── */
+.emg-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px; border-radius: 10px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all 0.18s ease; border: none;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.emg-btn-primary {
+  background: linear-gradient(135deg, var(--emg-red), #C62828);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(255,23,68,0.35);
+}
+.emg-btn-primary:hover { box-shadow: 0 6px 24px rgba(255,23,68,0.5); transform: translateY(-1px); }
+.emg-btn-outline {
+  background: transparent;
+  border: 1px solid var(--emg-red-border);
+  color: var(--emg-red);
+}
+.emg-btn-outline:hover { background: var(--emg-red-dim); }
+.emg-btn-green {
+  background: linear-gradient(135deg, #00897B, #00E676);
+  color: #fff; box-shadow: 0 4px 14px rgba(0,230,118,0.25);
+}
+.emg-btn-amber {
+  background: linear-gradient(135deg, #F57F17, #FFB300);
+  color: #fff; box-shadow: 0 4px 14px rgba(255,179,0,0.25);
+}
+.emg-btn-full { width:100%; justify-content:center; }
+
+/* ── Alert message send ── */
+.emg-share-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  margin-top: 14px;
+}
+
+/* ── First aid list ── */
+.emg-aid-list { display:flex; flex-direction:column; gap:8px; }
+.emg-aid-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--emg-glass-border);
+  border-radius: 10px; cursor: pointer;
+  transition: all 0.18s ease; text-decoration: none;
+}
+.emg-aid-item:hover {
+  background: var(--emg-red-dim);
+  border-color: var(--emg-red-border);
+  transform: translateX(4px);
+}
+.emg-aid-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.emg-aid-name { font-size:14px; font-weight:600; color:var(--color-text-primary); flex:1; }
+.emg-aid-chevron { font-size:11px; color:var(--color-text-muted); }
+
+/* ── Guide steps ── */
+.emg-step-list { display:flex; flex-direction:column; gap:6px; margin-top:4px; }
+.emg-step {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 13px; color: var(--color-text-secondary); line-height: 1.6;
+}
+.emg-step:last-child { border-bottom: none; }
+.emg-step-num {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink:0;
+  background: var(--emg-red-dim);
+  border: 1px solid var(--emg-red-border);
+  color: var(--emg-red); font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Orbitron', monospace;
+}
+
+/* ── Hotlines ── */
+.emg-hotline-list { display:flex; flex-direction:column; gap:8px; }
+.emg-hotline {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--emg-glass-border);
+  border-radius: 10px; text-decoration: none;
+  transition: all 0.18s;
+}
+.emg-hotline:hover { background: var(--emg-red-dim); border-color: var(--emg-red-border); }
+.emg-hotline-label { font-size:13px; color:var(--color-text-secondary); }
+.emg-hotline-num {
+  font-family: 'Orbitron', monospace;
+  font-size: 16px; font-weight: 700;
+}
+
+/* ── Emergency contact form ── */
+.emg-contact-form { display:flex; flex-direction:column; gap:10px; margin-top:4px; }
+.emg-input {
+  width: 100%; padding: 10px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--emg-glass-border);
+  border-radius: 10px; color: var(--color-text-primary);
+  font-size: 14px; font-family: 'Space Grotesk', sans-serif;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.emg-input:focus {
+  outline: none;
+  border-color: var(--emg-red-border);
+  background: rgba(255,23,68,0.04);
+}
+.emg-input::placeholder { color: var(--color-text-muted); }
+.emg-saved-contact {
+  background: rgba(0,230,118,0.06);
+  border: 1px solid rgba(0,230,118,0.2);
+  border-radius: 10px; padding: 12px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 6px;
+}
+.emg-saved-name { font-size:13px; font-weight:600; color:var(--color-text-primary); }
+.emg-saved-num  { font-size:12px; color:#00E676; font-family:'Orbitron',monospace; }
+
+/* ══════════════════ SOS MODAL ══════════════════ */
+.emg-modal-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.emg-modal-overlay.open { opacity:1; pointer-events:all; }
+.emg-modal {
+  background: linear-gradient(145deg, #0D0D1A, #1A0A0A);
+  border: 1px solid var(--emg-red-border);
+  border-radius: 24px; padding: 40px 36px;
+  max-width: 380px; width: 90%;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(255,23,68,0.3), 0 0 120px rgba(255,23,68,0.1);
+  animation: slide-up 0.3s ease;
+  position: relative; overflow: hidden;
+}
+.emg-modal::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(circle at 50% 0%, rgba(255,23,68,0.08), transparent 60%);
+  pointer-events:none;
+}
+.emg-modal-icon {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, #C62828, #FF1744);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 32px; color: #fff;
+  box-shadow: 0 0 30px rgba(255,23,68,0.6);
+  animation: glow-breathe 1.5s infinite;
+}
+.emg-modal-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 20px; font-weight: 900;
+  color: var(--emg-red); letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.emg-modal-service {
+  font-size: 16px; font-weight: 600;
+  color: var(--color-text-primary); margin-bottom: 28px;
+}
+
+/* SVG Countdown ring */
+.emg-countdown-wrap {
+  position: relative; width: 100px; height: 100px;
+  margin: 0 auto 24px;
+}
+.emg-countdown-wrap svg {
+  transform: rotate(-90deg);
+}
+.emg-countdown-track { fill: none; stroke: rgba(255,23,68,0.15); stroke-width: 6; }
+.emg-countdown-ring  {
+  fill: none; stroke: var(--emg-red); stroke-width: 6;
+  stroke-dasharray: 283; stroke-dashoffset: 283;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+.emg-countdown-num {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Orbitron', monospace;
+  font-size: 32px; font-weight: 900; color: var(--emg-red);
+}
+.emg-modal-actions { display:flex; gap:10px; margin-top:4px; }
+.emg-modal-actions .emg-btn { flex:1; justify-content:center; }
+
+/* ══════════════════ RESPONSIVE ══════════════════ */
+@media (max-width: 768px) {
+  .emg-title { font-size: 20px; }
+  .emg-call-grid { gap: 10px; }
+  .emg-call-btn { padding: 22px 10px; }
+  .emg-btn-number { font-size: 18px; }
+  .emg-layout { grid-template-columns: 1fr; }
+  .emg-share-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+{% block body %}
+
+<!-- ══ SIDEBAR ══════════════════════════════════════════════════════════ -->
+<aside class="side-nav" id="sideNav" aria-label="Main navigation">
+
+  <div class="s-head">
+    <div class="s-brand">
+      <div class="s-brand-icon" aria-hidden="true">⚕</div>
+      <div>
+        <div class="s-brand-name">Aura <span style="background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">MediX</span></div>
+        <div class="s-brand-sub">AI Wellness Platform</div>
+      </div>
+    </div>
+    <button id="sideToggleBtn" class="s-toggle-btn" onclick="toggleSide()" title="Toggle sidebar" aria-label="Toggle sidebar">
+      <i class="fas fa-chevron-left" id="sideToggleIcon"></i>
+    </button>
+  </div>
+
+  <div class="s-user">
+    <div class="s-avatar" aria-hidden="true">{{ current_user.username[0].upper() }}</div>
+    <div class="s-user-info">
+      <div class="s-uname">{{ (current_user.full_name or current_user.username)[:18] }}</div>
+      <div class="s-urole">
+        <span style="color:#10B981;font-size:8px">●</span>&nbsp;{{ (current_user.role or 'patient').title() }}
+      </div>
+    </div>
+  </div>
+
+  <nav class="s-body" aria-label="Sidebar navigation">
+
+    <div class="s-label">Overview</div>
+    <a href="{{ url_for('medix_portal.dashboard') }}"
+       class="s-item {% if request.endpoint=='medix_portal.dashboard' %}active{% endif %}" data-tip="Dashboard">
+      <i class="fas fa-th-large"></i><span>Dashboard</span>
+    </a>
+    <a href="{{ url_for('medix_portal.health_analytics') }}"
+       class="s-item {% if request.endpoint=='medix_portal.health_analytics' %}active{% endif %}" data-tip="Analytics">
+      <i class="fas fa-chart-line"></i><span>Health Analytics</span>
+    </a>
+
+    <div class="s-label">AI Modules</div>
+    <a href="{{ url_for('medix_portal.ai_doctor') }}"
+       class="s-item {% if request.endpoint=='medix_portal.ai_doctor' %}active{% endif %}" data-tip="AI Doctor">
+      <i class="fas fa-robot"></i><span>AURA AI Doctor</span>
+      <span class="s-badge">AI</span>
+    </a>
+    <a href="{{ url_for('medix_portal.symptom_engine') }}"
+       class="s-item {% if request.endpoint=='medix_portal.symptom_engine' %}active{% endif %}" data-tip="Symptom Engine">
+      <i class="fas fa-stethoscope"></i><span>Symptom Engine</span>
+    </a>
+    <a href="{{ url_for('medix_portal.disease_detection') }}"
+       class="s-item {% if request.endpoint=='medix_portal.disease_detection' %}active{% endif %}" data-tip="Disease Detection">
+      <i class="fas fa-dna"></i><span>Disease Detection</span>
+      <span class="s-badge">ML</span>
+    </a>
+    <a href="{{ url_for('medix_portal.medicine_recommendation') }}"
+       class="s-item {% if request.endpoint=='medix_portal.medicine_recommendation' %}active{% endif %}" data-tip="Medicine AI">
+      <i class="fas fa-pills"></i><span>Medicine AI</span>
+    </a>
+
+    <div class="s-label">Wellness</div>
+    <a href="{{ url_for('medix_portal.mental_wellness') }}"
+       class="s-item {% if request.endpoint=='medix_portal.mental_wellness' %}active{% endif %}" data-tip="Mental Wellness">
+      <i class="fas fa-brain"></i><span>Mental Wellness</span>
+    </a>
+    <a href="{{ url_for('medix_portal.bmi_fitness') }}"
+       class="s-item {% if request.endpoint=='medix_portal.bmi_fitness' %}active{% endif %}" data-tip="BMI & Fitness">
+      <i class="fas fa-heartbeat"></i><span>BMI &amp; Fitness</span>
+    </a>
+    <a href="{{ url_for('medix_portal.voice_assistant') }}"
+       class="s-item {% if request.endpoint=='medix_portal.voice_assistant' %}active{% endif %}" data-tip="Voice Assistant">
+      <i class="fas fa-microphone"></i><span>Voice Assistant</span>
+    </a>
+
+    <div class="s-label">Emergency</div>
+    <a href="{{ url_for('medix_portal.emergency') }}"
+       class="s-item emergency-item {% if request.endpoint=='medix_portal.emergency' %}active{% endif %}" data-tip="Emergency AI">
+      <i class="fas fa-exclamation-triangle"></i><span>Emergency AI</span>
+      <span class="s-badge red">SOS</span>
+    </a>
+    <a href="{{ url_for('medix_portal.hospital_locator') }}"
+       class="s-item {% if request.endpoint=='medix_portal.hospital_locator' %}active{% endif %}" data-tip="Hospital Locator">
+      <i class="fas fa-hospital"></i><span>Hospital Locator</span>
+    </a>
+
+    <div class="s-label">Records</div>
+    <a href="{{ url_for('medix_portal.medical_reports') }}"
+       class="s-item {% if request.endpoint=='medix_portal.medical_reports' %}active{% endif %}" data-tip="Medical Reports">
+      <i class="fas fa-file-medical"></i><span>Medical Reports</span>
+    </a>
+    <a href="{{ url_for('medix_portal.health_timeline') }}"
+       class="s-item {% if request.endpoint=='medix_portal.health_timeline' %}active{% endif %}" data-tip="Health Timeline">
+      <i class="fas fa-history"></i><span>Health Timeline</span>
+    </a>
+    <a href="{{ url_for('medix_portal.settings') }}"
+       class="s-item {% if request.endpoint=='medix_portal.settings' %}active{% endif %}" data-tip="Settings">
+      <i class="fas fa-sliders-h"></i><span>Settings</span>
+    </a>
+
+  </nav>
+
+  <div class="s-footer">
+    <div class="s-status">
+      <div class="s-dot"></div>
+      <span class="s-footer-text">All systems online · v6.0</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ TOP NAV ══════════════════════════════════════════════════════════ -->
+<nav class="top-nav" id="topNav" aria-label="Top navigation">
+
+  <div style="display:flex;align-items:center;gap:10px">
+    <button id="sideToggleMobile" onclick="toggleSide()" class="nav-icon-btn" title="Toggle Sidebar" aria-label="Toggle sidebar">
+      <i class="fas fa-bars"></i>
+    </button>
+    <a href="{{ url_for('medix_portal.dashboard') }}" class="nav-brand" id="navBrand">
+      <div class="nav-brand-mark">⚕</div>
+      <span class="nav-brand-name">Aura <span>MediX</span></span>
+    </a>
+  </div>
+
+  <div class="nav-links" role="navigation" aria-label="Quick navigation">
+    <a href="{{ url_for('medix_portal.dashboard') }}"
+       class="nav-link {% if request.endpoint=='medix_portal.dashboard' %}active{% endif %}">
+      <i class="fas fa-th-large"></i> Dashboard
+    </a>
+    <a href="{{ url_for('medix_portal.ai_doctor') }}"
+       class="nav-link {% if request.endpoint=='medix_portal.ai_doctor' %}active{% endif %}">
+      <i class="fas fa-robot"></i> AURA AI
+    </a>
+    <a href="{{ url_for('medix_portal.symptom_engine') }}"
+       class="nav-link {% if request.endpoint=='medix_portal.symptom_engine' %}active{% endif %}">
+      <i class="fas fa-stethoscope"></i> Symptoms
+    </a>
+    <a href="{{ url_for('medix_portal.health_analytics') }}"
+       class="nav-link {% if request.endpoint=='medix_portal.health_analytics' %}active{% endif %}">
+      <i class="fas fa-chart-line"></i> Analytics
+    </a>
+    <a href="{{ url_for('medix_portal.emergency') }}"
+       class="nav-link emergency-link {% if request.endpoint=='medix_portal.emergency' %}active{% endif %}">
+      <i class="fas fa-exclamation-triangle"></i> Emergency
+    </a>
+  </div>
+
+    <div class="nav-search" role="search">
+      <i class="fas fa-search" aria-hidden="true"></i>
+      <input type="text" placeholder="Search… (/)" id="globalSearch" autocomplete="off" aria-label="Search modules" />
+    </div>
+
+    <button class="nav-icon-btn" id="notifBtn" title="Notifications" aria-label="Open notifications" aria-haspopup="true">
+      <i class="fas fa-bell"></i>
+      <span class="notif-dot" aria-label="3 unread notifications">3</span>
+    </button>
+
+    <div class="p-drop">
+      <button class="profile-btn" onclick="toggleDrop()" id="profileBtn" aria-haspopup="true" aria-expanded="false">
+        <div class="p-avatar" aria-hidden="true">{{ current_user.username[0].upper() }}</div>
+        <span style="max-width:88px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px">
+          {{ (current_user.full_name or current_user.username)[:14] }}
+        </span>
+        <i class="fas fa-chevron-down" style="font-size:9px;color:var(--color-text-muted)" aria-hidden="true"></i>
+      </button>
+      <div class="p-menu" id="pMenu" role="menu">
+        <div style="padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:4px">
+          <div style="font-size:13px;font-weight:700;color:var(--color-text-primary);font-family:var(--f-head)">
+            {{ current_user.full_name or current_user.username }}
+          </div>
+          <div style="font-size:11px;color:var(--color-text-muted)">{{ (current_user.role or 'patient').title() }} Account</div>
+        </div>
+        <a href="{{ url_for('medix_portal.settings') }}"        class="p-item" role="menuitem"><i class="fas fa-cog"></i>          Settings</a>
+        <a href="{{ url_for('medix_portal.health_timeline') }}" class="p-item" role="menuitem"><i class="fas fa-history"></i>      Timeline</a>
+        <a href="{{ url_for('medix_portal.medical_reports') }}" class="p-item" role="menuitem"><i class="fas fa-file-medical"></i>  Reports</a>
+        <div class="p-sep"></div>
+        <a href="{{ url_for('medix_portal.logout') }}" class="p-item" style="color:#FB7185" role="menuitem">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ MAIN CONTENT ══════════════════════════════════════════════════════ -->
+<main class="main-wrap" id="mainWrap">
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for cat, msg in messages %}
+      <div class="alert alert-{{ 'err' if cat == 'error' else 'ok' }}" role="alert">
+        <span>
+          <i class="fas fa-{{ 'exclamation-circle' if cat == 'error' else 'check-circle' }}" aria-hidden="true"></i>
+          {{ msg }}
+        </span>
+        <button onclick="this.parentElement.remove()" aria-label="Dismiss">×</button>
+      </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+
+</main>
+
+<!-- ══ NOTIFICATION PANEL ════════════════════════════════════════════════ -->
+<aside class="notif-panel" id="notifPanel" aria-label="Notifications" aria-hidden="true">
+  <div class="notif-head">
+    <span>Notifications</span>
+    <button onclick="closeNotif()" aria-label="Close notifications">×</button>
+  </div>
+  <div class="notif-item">
+    <div class="ni ni-c" aria-hidden="true"><i class="fas fa-heartbeat"></i></div>
+    <div>
+      <div class="ni-title">Vitals check due</div>
+      <div class="ni-time">2 hours ago</div>
+    </div>
+  </div>
+  <div class="notif-item">
+    <div class="ni ni-g" aria-hidden="true"><i class="fas fa-check-circle"></i></div>
+    <div>
+      <div class="ni-title">Health score updated: {{ current_user.health_score or 85 }}/100</div>
+      <div class="ni-time">5 hours ago</div>
+    </div>
+  </div>
+  <div class="notif-item">
+    <div class="ni ni-p" aria-hidden="true"><i class="fas fa-robot"></i></div>
+    <div>
+      <div class="ni-title">New AI health insight available</div>
+      <div class="ni-time">1 day ago</div>
+    </div>
+  </div>
+</aside>
+
+<!-- Global search routing -->
+<script>
+document.getElementById('globalSearch')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.value.trim()) {
+    const q = e.target.value.toLowerCase().trim();
+    const routes = {
+      'ai doctor':  '{{ url_for("medix_portal.ai_doctor") }}',
+      'aura':       '{{ url_for("medix_portal.ai_doctor") }}',
+      'disease':    '{{ url_for("medix_portal.disease_detection") }}',
+      'emergency':  '{{ url_for("medix_portal.emergency") }}',
+      'mental':     '{{ url_for("medix_portal.mental_wellness") }}',
+      'analytics':  '{{ url_for("medix_portal.health_analytics") }}',
+      'reports':    '{{ url_for("medix_portal.medical_reports") }}',
+      'hospital':   '{{ url_for("medix_portal.hospital_locator") }}',
+      'symptom':    '{{ url_for("medix_portal.symptom_engine") }}',
+      'bmi':        '{{ url_for("medix_portal.bmi_fitness") }}',
+      'medicine':   '{{ url_for("medix_portal.medicine_recommendation") }}',
+      'voice':      '{{ url_for("medix_portal.voice_assistant") }}',
+      'timeline':   '{{ url_for("medix_portal.health_timeline") }}',
+      'settings':   '{{ url_for("medix_portal.settings") }}',
+      'dashboard':  '{{ url_for("medix_portal.dashboard") }}',
+    };
+    for (const [k, url] of Object.entries(routes)) {
+      if (q.includes(k)) { window.location.href = url; return; }
+    }
+    if (typeof showToast !== 'undefined') showToast(`No module found for "${e.target.value}"`, 'info');
+  }
+});
+</script>
+
+{% endblock %}
+
+Edit and give me the complete file

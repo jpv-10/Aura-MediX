@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Sign In — Aura MediX{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}" />
+{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+  <div class="auth-card animate-on-scroll">
+    <div class="auth-header">
+      <div class="auth-logo">⚕</div>
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-sub">Sign in to your Aura MediX account</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}{% for cat, msg in messages %}
+        <div class="alert alert-{{ 'err' if cat == 'error' else 'ok' }}" role="alert">
+          <span><i class="fas fa-{{ 'exclamation-circle' if cat == 'error' else 'check-circle' }}"></i> {{ msg }}</span>
+          <button onclick="this.parentElement.remove()">×</button>
+        </div>
+      {% endfor %}{% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('medix_portal.login') }}" novalidate>
+      {{ csrf_token() if csrf_token is defined else '' }}
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email address</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="email" name="email" class="nexus-input"
+                 placeholder="you@example.com" required autocomplete="email" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password" name="password" class="nexus-input"
+                 placeholder="Your password" required autocomplete="current-password" />
+        </div>
+      </div>
+
+      <div class="remember-row">
+        <label>
+          <input type="checkbox" name="remember" style="accent-color:#7C3AED" />
+          Remember me
+        </label>
+        <a href="#">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;height:44px">
+        <i class="fas fa-sign-in-alt"></i> Sign in
+      </button>
+    </form>
+
+    <div class="auth-divider"><span>or continue as</span></div>
+    <a href="{{ url_for('medix_portal.guest_session') }}" class="guest-btn">
+      <i class="fas fa-user-secret"></i> Guest demo — no account needed
+    </a>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="{{ url_for('medix_portal.register') }}">Create one free</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

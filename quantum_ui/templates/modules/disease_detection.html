@@ -1,0 +1,103 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Disease Detection — HealthAI Nexus{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title"><span>Disease</span> Detection</h1>
+    <p class="page-subtitle">ML-powered early risk prediction for diabetes, heart disease &amp; hypertension</p>
+  </div>
+  <span class="badge badge-purple"><i class="fas fa-dna" style="font-size:9px"></i> ML Models Active</span>
+</div>
+
+<div class="module-layout">
+  <!-- Input panel -->
+  <div class="panel-card">
+    <div class="panel-header"><i class="fas fa-dna"></i> Select Disease &amp; Enter Parameters</div>
+
+    <!-- Disease tabs -->
+    <div class="disease-tabs" id="diseaseTabs">
+      <button class="disease-tab active" data-target="diabetes">
+        <i class="fas fa-tint"></i> Diabetes
+      </button>
+      <button class="disease-tab" data-target="heart">
+        <i class="fas fa-heart"></i> Heart Disease
+      </button>
+      <button class="disease-tab" data-target="hypertension">
+        <i class="fas fa-thermometer-half"></i> Hypertension
+      </button>
+    </div>
+
+    <!-- Diabetes form -->
+    <div class="disease-form active" id="form-diabetes">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Pregnancies</label><input type="number" class="nexus-input" name="pregnancies" placeholder="0" min="0" max="20" /></div>
+        <div class="form-group"><label class="form-label">Glucose (mg/dL)</label><input type="number" class="nexus-input" name="glucose" placeholder="120" min="0" max="300" /></div>
+        <div class="form-group"><label class="form-label">Blood Pressure (mmHg)</label><input type="number" class="nexus-input" name="blood_pressure" placeholder="80" min="0" max="200" /></div>
+        <div class="form-group"><label class="form-label">Skin Thickness (mm)</label><input type="number" class="nexus-input" name="skin_thickness" placeholder="20" min="0" max="100" /></div>
+        <div class="form-group"><label class="form-label">Insulin (μU/mL)</label><input type="number" class="nexus-input" name="insulin" placeholder="80" min="0" max="900" /></div>
+        <div class="form-group"><label class="form-label">BMI</label><input type="number" class="nexus-input" name="bmi" placeholder="25.0" step="0.1" min="10" max="70" /></div>
+        <div class="form-group"><label class="form-label">Diabetes Pedigree</label><input type="number" class="nexus-input" name="dpf" placeholder="0.5" step="0.01" min="0" max="3" /></div>
+        <div class="form-group"><label class="form-label">Age</label><input type="number" class="nexus-input" name="age" placeholder="35" min="1" max="120" /></div>
+      </div>
+      <button class="btn btn-primary btn-predict" data-disease="diabetes">
+        <i class="fas fa-search"></i> Analyze Diabetes Risk
+      </button>
+    </div>
+
+    <div class="disease-form" id="form-heart">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Age</label><input type="number" class="nexus-input" name="age" placeholder="55" min="1" max="120" /></div>
+        <div class="form-group"><label class="form-label">Sex (1=Male, 0=Female)</label><input type="number" class="nexus-input" name="sex" placeholder="1" min="0" max="1" /></div>
+        <div class="form-group"><label class="form-label">Chest Pain Type (0–3)</label><input type="number" class="nexus-input" name="cp" placeholder="0" min="0" max="3" /></div>
+        <div class="form-group"><label class="form-label">Resting BP (mmHg)</label><input type="number" class="nexus-input" name="trestbps" placeholder="130" min="60" max="220" /></div>
+        <div class="form-group"><label class="form-label">Cholesterol (mg/dL)</label><input type="number" class="nexus-input" name="chol" placeholder="250" min="100" max="600" /></div>
+        <div class="form-group"><label class="form-label">Fasting Blood Sugar &gt;120 (0/1)</label><input type="number" class="nexus-input" name="fbs" placeholder="0" min="0" max="1" /></div>
+        <div class="form-group"><label class="form-label">Resting ECG Result (0–2)</label><input type="number" class="nexus-input" name="restecg" placeholder="0" min="0" max="2" /></div>
+        <div class="form-group"><label class="form-label">Max Heart Rate Achieved</label><input type="number" class="nexus-input" name="thalach" placeholder="150" min="60" max="220" /></div>
+        <div class="form-group"><label class="form-label">Exercise-Induced Angina (0/1)</label><input type="number" class="nexus-input" name="exang" placeholder="0" min="0" max="1" /></div>
+        <div class="form-group"><label class="form-label">ST Depression (oldpeak)</label><input type="number" class="nexus-input" name="oldpeak" placeholder="1.0" step="0.1" min="0" max="7" /></div>
+        <div class="form-group"><label class="form-label">ST Slope (0–2)</label><input type="number" class="nexus-input" name="slope" placeholder="1" min="0" max="2" /></div>
+        <div class="form-group"><label class="form-label">Major Vessels (ca 0–3)</label><input type="number" class="nexus-input" name="ca" placeholder="0" min="0" max="3" /></div>
+        <div class="form-group"><label class="form-label">Thalassemia (1=Normal, 2=Fixed, 3=Reversible)</label><input type="number" class="nexus-input" name="thal" placeholder="2" min="1" max="3" /></div>
+      </div>
+      <button class="btn btn-primary btn-predict" data-disease="heart">
+        <i class="fas fa-heart"></i> Analyze Heart Risk
+      </button>
+    </div>
+
+    <div class="disease-form" id="form-hypertension">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Age</label><input type="number" class="nexus-input" name="age" placeholder="45" min="1" max="120" /></div>
+        <div class="form-group"><label class="form-label">BMI</label><input type="number" class="nexus-input" name="bmi" placeholder="27.0" step="0.1" min="10" max="70" /></div>
+        <div class="form-group"><label class="form-label">Cholesterol (mg/dL)</label><input type="number" class="nexus-input" name="cholesterol" placeholder="200" min="100" max="400" /></div>
+        <div class="form-group"><label class="form-label">Glucose (mg/dL)</label><input type="number" class="nexus-input" name="glucose" placeholder="100" min="70" max="300" /></div>
+        <div class="form-group"><label class="form-label">Smoking (0=No, 1=Yes)</label><input type="number" class="nexus-input" name="smoking" placeholder="0" min="0" max="1" /></div>
+        <div class="form-group"><label class="form-label">Alcohol (0=None, 1=Yes)</label><input type="number" class="nexus-input" name="alcohol" placeholder="0" min="0" max="1" /></div>
+        <div class="form-group"><label class="form-label">Stress Level (0–10)</label><input type="number" class="nexus-input" name="stress_level" placeholder="5" min="0" max="10" /></div>
+      </div>
+      <button class="btn btn-primary btn-predict" data-disease="hypertension">
+        <i class="fas fa-thermometer-half"></i> Analyze Hypertension Risk
+      </button>
+    </div>
+  </div>
+
+  <!-- Results panel -->
+  <div class="panel-card" id="resultPanel">
+    <div class="panel-header"><i class="fas fa-chart-bar"></i> Prediction Results</div>
+    <div class="result-idle" id="resultIdle">
+      <div style="font-size:48px;opacity:0.3;margin-bottom:16px">🔬</div>
+      <p style="font-size:14px;color:var(--color-text-muted);line-height:1.6">
+        Fill in the parameters and click Analyze to get your AI-powered risk assessment.
+      </p>
+    </div>
+    <div id="resultContent" class="hidden">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/disease_detection.js') }}"></script>
+{% endblock %}

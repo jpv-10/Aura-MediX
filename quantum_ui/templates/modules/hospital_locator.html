@@ -1,0 +1,488 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Hospital Locator — Aura MediX{% endblock %}
+
+{% block content %}
+
+<style>
+
+#hospitalList::-webkit-scrollbar {
+    width: 6px;
+}
+
+#hospitalList::-webkit-scrollbar-thumb {
+    background: #7C3AED;
+    border-radius: 999px;
+}
+
+#leafletMap {
+    z-index: 1;
+}
+
+@media (max-width: 900px) {
+    .hospital-layout {
+        grid-template-columns: 1fr !important;
+        height: auto !important;
+    }
+    #hospitalMap {
+        min-height: 400px;
+    }
+}
+
+</style>
+
+<div class="page-header">
+
+  <div>
+    <h1 class="page-title">
+      <span>Hospital</span> Locator
+    </h1>
+    <p class="page-subtitle">
+      Find nearby hospitals, clinics and emergency facilities
+    </p>
+  </div>
+
+  <button class="btn btn-primary btn-sm" id="locateBtn">
+    <i class="fas fa-location-arrow"></i>
+    Use my location
+  </button>
+
+</div>
+
+<div class="hospital-layout"
+     style="display:grid;grid-template-columns:360px 1fr;gap:20px;height:calc(100vh - var(--topnav-h) - 120px)">
+
+  <!-- LEFT PANEL -->
+  <div style="display:flex;flex-direction:column;gap:12px;overflow:hidden;min-width:0;">
+
+    <!-- SEARCH -->
+    <div class="panel-card" style="flex-shrink:0;">
+      <div style="position:relative;">
+        <i class="fas fa-search"
+           style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--color-text-muted);font-size:13px;pointer-events:none;">
+        </i>
+        <input
+          type="text"
+          id="hospitalSearch"
+          class="nexus-input"
+          style="padding-left:40px;width:100%;box-sizing:border-box;"
+          placeholder="Search hospitals..."
+        />
+      </div>
+    </div>
+
+    <!-- HOSPITAL LIST -->
+    <div id="hospitalList"
+         style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:4px;min-height:0;">
+
+      <div style="text-align:center;padding:40px 20px;color:var(--color-text-muted);">
+        <i class="fas fa-location-arrow"
+           style="font-size:28px;opacity:0.25;display:block;margin-bottom:14px;">
+        </i>
+        <span style="font-size:14px;">Click "Use my location" to load nearby hospitals</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- MAP -->
+  <div class="panel-card" style="padding:0;overflow:hidden;min-width:0;">
+
+    <div id="hospitalMap"
+         style="width:100%;height:100%;min-height:400px;background:var(--color-bg-elevated);">
+
+      <div style="display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;gap:14px;color:var(--color-text-muted);">
+        <i class="fas fa-map-marked-alt" style="font-size:48px;opacity:0.2;"></i>
+        <p style="font-size:14px;margin:0;">Map loads when location is enabled</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+let map = null;
+let hospitalMarkers = [];
+let allHospitals = [];
+
+
+// =============================
+// SEARCH FILTER
+// =============================
+
+document.getElementById("hospitalSearch").addEventListener("input", function () {
+    const query = this.value.toLowerCase().trim();
+    const cards = document.querySelectorAll(".hosp-card");
+    cards.forEach((card) => {
+        const name = card.dataset.name || "";
+        card.style.display = name.includes(query) ? "block" : "none";
+    });
+});
+
+
+// =============================
+// USE MY LOCATION
+// =============================
+
+document.getElementById("locateBtn").addEventListener("click", () => {
+
+    if (!navigator.geolocation) {
+        alert("Geolocation not supported");
+        return;
+    }
+
+    const btn = document.getElementById("locateBtn");
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Locating...';
+    btn.disabled = true;
+
+    navigator.geolocation.getCurrentPosition(
+
+        (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            initMap(lat, lng);
+            fetchHospitals(lat, lng);
+
+            btn.innerHTML = '<i class="fas fa-check"></i> Located';
+            btn.disabled = false;
+        },
+
+        () => {
+            alert("Location access denied");
+            btn.innerHTML = '<i class="fas fa-location-arrow"></i> Use my location';
+            btn.disabled = false;
+        }
+
+    );
+
+});
+
+
+// =============================
+// INITIALIZE MAP
+// =============================
+
+function initMap(lat, lng) {
+
+    if (map) {
+        map.remove();
+        hospitalMarkers = [];
+    }
+
+    document.getElementById("hospitalMap").innerHTML =
+        '<div id="leafletMap" style="width:100%;height:100%;"></div>';
+
+    map = L.map("leafletMap").setView([lat, lng], 14);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap"
+    }).addTo(map);
+
+    // User location marker with custom style
+    const userIcon = L.divIcon({
+        html: `<div style="
+            width:16px;height:16px;
+            background:#A855F7;
+            border:3px solid white;
+            border-radius:50%;
+            box-shadow:0 0 0 3px rgba(168,85,247,0.4);
+        "></div>`,
+        className: "",
+        iconSize: [16, 16],
+        iconAnchor: [8, 8]
+    });
+
+    L.marker([lat, lng], { icon: userIcon })
+        .addTo(map)
+        .bindPopup("<b>Your Location</b>")
+        .openPopup();
+}
+
+
+// =============================
+// FETCH HOSPITALS
+// =============================
+
+async function fetchHospitals(lat, lng) {
+
+    const list = document.getElementById("hospitalList");
+
+    list.innerHTML = `
+        <div style="text-align:center;padding:30px 20px;color:var(--color-text-muted);">
+            <i class="fas fa-spinner fa-spin" style="font-size:20px;margin-bottom:12px;display:block;color:#A855F7;"></i>
+            <span style="font-size:13px;">Finding nearby hospitals...</span>
+        </div>
+    `;
+
+    try {
+
+        const query = `
+        [out:json];
+        (
+          node["amenity"="hospital"](around:5000,${lat},${lng});
+          way["amenity"="hospital"](around:5000,${lat},${lng});
+          relation["amenity"="hospital"](around:5000,${lat},${lng});
+        );
+        out center;
+        `;
+
+        const response = await fetch("https://overpass-api.de/api/interpreter", {
+            method: "POST",
+            body: query
+        });
+
+        const data = await response.json();
+        const hospitals = data.elements || [];
+
+        if (!hospitals.length) {
+            list.innerHTML = `
+                <div style="text-align:center;padding:40px 20px;color:var(--color-text-muted);">
+                    <i class="fas fa-hospital-slash" style="font-size:28px;opacity:0.25;display:block;margin-bottom:12px;"></i>
+                    <span style="font-size:14px;">No hospitals found nearby</span>
+                </div>
+            `;
+            return;
+        }
+
+        list.innerHTML = "";
+
+        hospitals.forEach((hospital, index) => {
+
+            const tags = hospital.tags || {};
+
+            const name    = tags.name || "Unknown Hospital";
+            const address = tags["addr:full"] || tags["addr:street"] || tags["addr:city"] || "Address not available";
+            const phone   = tags["contact:phone"] || tags["phone"] || null;
+            const website = tags["website"] || tags["contact:website"] || null;
+            const emergency = tags["emergency"] === "yes";
+
+            const hLat = hospital.lat || hospital.center?.lat;
+            const hLng = hospital.lon || hospital.center?.lon;
+
+            // Distance calculation (straight line, km)
+            let distLabel = "Nearby";
+            if (hLat && hLng) {
+                const R = 6371;
+                const dLat = (hLat - lat) * Math.PI / 180;
+                const dLon = (hLng - lng) * Math.PI / 180;
+                const a = Math.sin(dLat/2)**2 +
+                          Math.cos(lat * Math.PI/180) * Math.cos(hLat * Math.PI/180) *
+                          Math.sin(dLon/2)**2;
+                const dist = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                distLabel = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
+            }
+
+            // Map marker
+            if (hLat && hLng) {
+                const marker = L.marker([hLat, hLng])
+                    .addTo(map)
+                    .bindPopup(`<b>${name}</b><br><small>${address}</small>`);
+                hospitalMarkers.push(marker);
+            }
+
+            // Extra badges
+            const emergencyBadge = emergency
+                ? `<span style="
+                    background:rgba(239,68,68,0.15);
+                    color:#f87171;
+                    padding:3px 8px;
+                    border-radius:999px;
+                    font-size:10px;
+                    font-weight:700;
+                    letter-spacing:0.5px;
+                  ">🚨 24h Emergency</span>`
+                : "";
+
+            // Action buttons
+            const mapBtn = (hLat && hLng) ? `
+                <a href="https://www.openstreetmap.org/?mlat=${hLat}&mlon=${hLng}"
+                   target="_blank"
+                   onclick="event.stopPropagation()"
+                   style="
+                     display:inline-flex;align-items:center;gap:6px;
+                     background:#7c3aed;color:white;
+                     padding:8px 14px;border-radius:10px;
+                     font-size:12px;font-weight:600;
+                     text-decoration:none;white-space:nowrap;
+                     transition:background 0.2s;
+                   "
+                   onmouseover="this.style.background='#8B5CF6'"
+                   onmouseout="this.style.background='#7c3aed'">
+                   <i class="fas fa-map-marker-alt"></i> Open Map
+                </a>` : "";
+
+            const directionsBtn = (hLat && hLng) ? `
+                <a href="https://www.google.com/maps/dir/?api=1&destination=${hLat},${hLng}"
+                   target="_blank"
+                   onclick="event.stopPropagation()"
+                   style="
+                     display:inline-flex;align-items:center;gap:6px;
+                     background:rgba(168,85,247,0.12);color:#c084fc;
+                     padding:8px 14px;border-radius:10px;
+                     font-size:12px;font-weight:600;
+                     text-decoration:none;white-space:nowrap;
+                     border:1px solid rgba(168,85,247,0.25);
+                     transition:all 0.2s;
+                   "
+                   onmouseover="this.style.background='rgba(168,85,247,0.22)'"
+                   onmouseout="this.style.background='rgba(168,85,247,0.12)'">
+                   <i class="fas fa-route"></i> Directions
+                </a>` : "";
+
+            const phoneBtn = phone ? `
+                <a href="tel:${phone}"
+                   onclick="event.stopPropagation()"
+                   style="
+                     display:inline-flex;align-items:center;gap:6px;
+                     background:rgba(34,197,94,0.1);color:#4ade80;
+                     padding:8px 14px;border-radius:10px;
+                     font-size:12px;font-weight:600;
+                     text-decoration:none;white-space:nowrap;
+                     border:1px solid rgba(34,197,94,0.2);
+                   ">
+                   <i class="fas fa-phone"></i> Call
+                </a>` : "";
+
+            // Card
+            const card = document.createElement("div");
+            card.className = "hosp-card";
+            card.dataset.name = name.toLowerCase();
+            card.style.cssText = `
+                background: linear-gradient(145deg, #161129, #0d0a1a);
+                border: 1px solid rgba(168,85,247,0.3);
+                border-radius: 16px;
+                padding: 14px 16px;
+                cursor: pointer;
+                transition: border-color 0.2s, transform 0.2s;
+            `;
+
+            card.innerHTML = `
+                <!-- TOP ROW -->
+                <div style="display:flex;gap:12px;align-items:flex-start;">
+
+                    <!-- Icon -->
+                    <div style="
+                        width:42px;height:42px;min-width:42px;
+                        border-radius:12px;
+                        background:rgba(168,85,247,0.15);
+                        display:flex;align-items:center;justify-content:center;
+                        color:#c084fc;font-size:17px;
+                        flex-shrink:0;
+                    ">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+
+                    <!-- Name + address -->
+                    <div style="flex:1;min-width:0;">
+
+                        <!-- Name + distance badge -->
+                        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px;">
+                            <div style="
+                                color:white;
+                                font-size:14px;
+                                font-weight:700;
+                                line-height:1.4;
+                                word-break:break-word;
+                                overflow-wrap:anywhere;
+                                flex:1;min-width:0;
+                            ">${name}</div>
+
+                            <span style="
+                                background:rgba(168,85,247,0.15);
+                                color:#d8b4fe;
+                                padding:3px 10px;
+                                border-radius:999px;
+                                font-size:11px;
+                                font-weight:600;
+                                white-space:nowrap;
+                                flex-shrink:0;
+                                align-self:flex-start;
+                            ">${distLabel}</span>
+                        </div>
+
+                        <!-- Address -->
+                        <div style="
+                            color:#9ca3af;
+                            font-size:12px;
+                            line-height:1.5;
+                            word-break:break-word;
+                            overflow-wrap:anywhere;
+                        ">
+                            <i class="fas fa-map-pin" style="color:#7c3aed;font-size:10px;margin-right:4px;"></i>
+                            ${address}
+                        </div>
+
+                        <!-- Emergency badge -->
+                        ${emergencyBadge ? `<div style="margin-top:6px;">${emergencyBadge}</div>` : ""}
+
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div style="
+                    margin-top:12px;
+                    display:flex;
+                    gap:8px;
+                    flex-wrap:wrap;
+                    border-top:1px solid rgba(168,85,247,0.12);
+                    padding-top:12px;
+                ">
+                    ${mapBtn}
+                    ${directionsBtn}
+                    ${phoneBtn}
+                </div>
+            `;
+
+            card.addEventListener("mouseenter", () => {
+                card.style.borderColor = "rgba(168,85,247,0.65)";
+                card.style.transform = "translateY(-2px)";
+            });
+            card.addEventListener("mouseleave", () => {
+                card.style.borderColor = "rgba(168,85,247,0.3)";
+                card.style.transform = "translateY(0)";
+            });
+
+            card.addEventListener("click", () => focusHospital(hLat, hLng));
+
+            list.appendChild(card);
+
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        list.innerHTML = `
+            <div style="text-align:center;padding:30px 20px;">
+                <i class="fas fa-exclamation-triangle" style="font-size:24px;color:#f87171;display:block;margin-bottom:10px;"></i>
+                <span style="font-size:13px;color:#f87171;">Failed to load hospitals. Please try again.</span>
+            </div>
+        `;
+    }
+}
+
+
+// =============================
+// FOCUS HOSPITAL ON MAP
+// =============================
+
+function focusHospital(lat, lng) {
+    if (!map || !lat || !lng) return;
+    map.setView([lat, lng], 17);
+}
+
+</script>
+
+{% endblock %}

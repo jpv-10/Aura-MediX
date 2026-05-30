@@ -1,0 +1,399 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Dashboard — Aura MediX{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="orb orb-a" aria-hidden="true"></div>
+<div class="orb orb-b" aria-hidden="true"></div>
+
+<!-- ── WELCOME BANNER ─────────────────────────────────────────────────── -->
+<div class="welcome-banner animate-on-scroll">
+  <div class="wb-left">
+    <div class="wb-greeting">
+      Good <span id="timeGreeting">day</span>,
+      <span class="grad-text">{{ current_user.full_name or current_user.username }}</span> 👋
+    </div>
+    <div class="wb-sub">Your AI wellness command center is ready. Here's today's health overview.</div>
+    <div class="wb-actions">
+      <a href="{{ url_for('medix_portal.ai_doctor') }}" class="btn btn-primary btn-sm">
+        <i class="fas fa-robot"></i> Chat with AURA
+      </a>
+      <a href="{{ url_for('medix_portal.symptom_engine') }}" class="btn btn-outline btn-sm">
+        <i class="fas fa-stethoscope"></i> Check Symptoms
+      </a>
+    </div>
+  </div>
+
+   </div>
+
+<!-- ── KPI CARDS ──────────────────────────────────────────────────────── -->
+<div class="kpi-row">
+  <div class="kpi-card animate-on-scroll" data-c="purple">
+    <div class="kpi-top">
+      <div class="kpi-icon kpi-purple"><i class="fas fa-heartbeat"></i></div>
+      <div class="kpi-trend up" id="hrTrend">↑ Normal</div>
+    </div>
+    <div class="kpi-val" id="heartRateVal">72</div>
+    <div class="kpi-lbl">Heart Rate <span class="kpi-unit">bpm</span></div>
+  </div>
+  <div class="kpi-card animate-on-scroll" data-c="cyan">
+    <div class="kpi-top">
+      <div class="kpi-icon kpi-cyan"><i class="fas fa-lungs"></i></div>
+      <div class="kpi-trend up">↑ Excellent</div>
+    </div>
+    <div class="kpi-val" id="spo2Val">98</div>
+    <div class="kpi-lbl">SpO₂ <span class="kpi-unit">%</span></div>
+  </div>
+  <div class="kpi-card animate-on-scroll" data-c="green">
+    <div class="kpi-top">
+      <div class="kpi-icon kpi-green"><i class="fas fa-fire"></i></div>
+      <div class="kpi-trend up">↑ Active</div>
+    </div>
+    <div class="kpi-val">15</div>
+    <div class="kpi-lbl">Wellness Streak <span class="kpi-unit">days</span></div>
+  </div>
+  <div class="kpi-card animate-on-scroll" data-c="amber">
+    <div class="kpi-top">
+      <div class="kpi-icon kpi-amber"><i class="fas fa-thermometer-half"></i></div>
+      <div class="kpi-trend stable">→ Normal</div>
+    </div>
+    <div class="kpi-val" id="tempVal">37.0</div>
+    <div class="kpi-lbl">Temperature <span class="kpi-unit">°C</span></div>
+  </div>
+  <div class="kpi-card animate-on-scroll" data-c="blue">
+    <div class="kpi-top">
+      <div class="kpi-icon kpi-blue"><i class="fas fa-tint"></i></div>
+      <div class="kpi-trend stable">→ Normal</div>
+    </div>
+    <div class="kpi-val" id="bpVal">120/80</div>
+    <div class="kpi-lbl">Blood Pressure <span class="kpi-unit">mmHg</span></div>
+  </div>
+  <div class="kpi-card animate-on-scroll" data-c="pink">
+    <div class="kpi-top">
+      <div class="kpi-icon kpi-magenta"><i class="fas fa-brain"></i></div>
+      <div class="kpi-trend up">↑ Good</div>
+    </div>
+    <div class="kpi-val">87</div>
+    <div class="kpi-lbl">Wellness Score <span class="kpi-unit">/100</span></div>
+  </div>
+</div>
+
+<!-- ── CHARTS ROW ─────────────────────────────────────────────────────── -->
+<div class="dash-row">
+  <!-- Vitals trend (3 cols) -->
+  <div class="card card-p animate-on-scroll" style="flex:3;min-width:0">
+    <div class="card-head">
+      <div class="card-title"><i class="fas fa-chart-area"></i> Vitals Trend</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm chart-period active" data-period="7">7D</button>
+        <button class="btn btn-ghost btn-sm chart-period" data-period="30">30D</button>
+      </div>
+    </div>
+    <div style="position:relative;height:200px">
+      <canvas id="vitalsTrendChart"></canvas>
+    </div>
+  </div>
+
+  <!-- AI Insights (1 col) -->
+  <div class="card card-p animate-on-scroll" style="flex:1;min-width:240px">
+    <div class="card-head">
+      <div class="card-title"><i class="fas fa-robot"></i> AI Insights</div>
+      <span class="badge badge-purple">Live</span>
+    </div>
+    <div class="insight-item">
+      <div class="insight-icon"><i class="fas fa-heart"></i></div>
+      <div>
+        <div class="insight-text">Heart rate variability is within healthy range.</div>
+        <div class="insight-conf">Confidence: <span>94%</span></div>
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-icon"><i class="fas fa-moon"></i></div>
+      <div>
+        <div class="insight-text">Sleep quality improved 12% this week.</div>
+        <div class="insight-conf">Confidence: <span>88%</span></div>
+      </div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-icon"><i class="fas fa-running"></i></div>
+      <div>
+        <div class="insight-text">Increase daily steps by 1,500 for optimal cardio.</div>
+        <div class="insight-conf">Confidence: <span>91%</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECOND ROW: Activity + Radar + Quick Actions ───────────────────── -->
+<div class="dash-row">
+  <!-- Recent Activity -->
+  <div class="card card-p animate-on-scroll" style="flex:2;min-width:0">
+    <div class="card-head">
+      <div class="card-title"><i class="fas fa-history"></i> Recent Activity</div>
+    </div>
+    <div class="act-feed">
+      <div class="act-item">
+        <div class="act-dot purple"></div>
+        <div><div class="act-text">AI Doctor consultation completed</div><div class="act-time">2 hours ago</div></div>
+      </div>
+      <div class="act-item">
+        <div class="act-dot green"></div>
+        <div><div class="act-text">Health score updated to {{ current_user.health_score or 85 }}/100</div><div class="act-time">5 hours ago</div></div>
+      </div>
+      <div class="act-item">
+        <div class="act-dot pink"></div>
+        <div><div class="act-text">Symptom analysis: No critical findings</div><div class="act-time">Yesterday</div></div>
+      </div>
+      <div class="act-item">
+        <div class="act-dot amber"></div>
+        <div><div class="act-text">BMI calculated: Healthy range</div><div class="act-time">2 days ago</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wellness Radar -->
+  <div class="card card-p animate-on-scroll" style="flex:1;min-width:200px">
+    <div class="card-head">
+      <div class="card-title"><i class="fas fa-spider"></i> Wellness Radar</div>
+    </div>
+    <div style="position:relative;height:180px">
+      <canvas id="wellnessRadar"></canvas>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="card card-p animate-on-scroll" style="flex:1;min-width:180px">
+    <div class="card-head">
+      <div class="card-title"><i class="fas fa-bolt"></i> Quick Actions</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <a href="{{ url_for('medix_portal.ai_doctor') }}" class="btn btn-primary btn-sm" style="justify-content:flex-start">
+        <i class="fas fa-robot"></i> Ask AURA AI
+      </a>
+      <a href="{{ url_for('medix_portal.symptom_engine') }}" class="btn btn-outline btn-sm" style="justify-content:flex-start">
+        <i class="fas fa-stethoscope"></i> Check Symptoms
+      </a>
+      <a href="{{ url_for('medix_portal.disease_detection') }}" class="btn btn-outline btn-sm" style="justify-content:flex-start">
+        <i class="fas fa-dna"></i> Disease Scan
+      </a>
+      <a href="{{ url_for('medix_portal.medical_reports') }}" class="btn btn-outline btn-sm" style="justify-content:flex-start">
+        <i class="fas fa-file-medical"></i> View Reports
+      </a>
+      <a href="{{ url_for('medix_portal.emergency') }}" class="btn btn-danger btn-sm" style="justify-content:flex-start">
+        <i class="fas fa-exclamation-triangle"></i> Emergency SOS
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ── QUICK ACCESS GRID ───────────────────────────────────────────────── -->
+<div class="card card-p animate-on-scroll" style="margin-bottom:var(--sp-xl)">
+  <div class="card-head">
+    <div class="card-title"><i class="fas fa-th"></i> Quick Access</div>
+    <span style="font-size:11px;color:var(--color-text-muted)">All AI modules</span>
+  </div>
+  <div class="feat-grid">
+    <a href="{{ url_for('medix_portal.ai_doctor') }}" class="feat-card" data-c="purple">
+      <div class="fc-icon fc-purple"><i class="fas fa-robot"></i></div>
+      <div class="fc-title">AURA AI Doctor</div>
+      <div class="fc-desc">24/7 AI health consultation &amp; emotional support</div>
+      <div class="fc-cta">Consult now <i class="fas fa-arrow-right"></i></div>
+    </a>
+    <a href="{{ url_for('medix_portal.disease_detection') }}" class="feat-card" data-c="pink">
+      <div class="fc-icon fc-pink"><i class="fas fa-dna"></i></div>
+      <div class="fc-title">Disease Detection</div>
+      <div class="fc-desc">ML-powered early risk prediction</div>
+      <div class="fc-cta">Analyze <i class="fas fa-arrow-right"></i></div>
+    </a>
+    <a href="{{ url_for('medix_portal.symptom_engine') }}" class="feat-card" data-c="blue">
+      <div class="fc-icon fc-blue"><i class="fas fa-stethoscope"></i></div>
+      <div class="fc-title">Symptom Engine</div>
+      <div class="fc-desc">AI-powered symptom analysis</div>
+      <div class="fc-cta">Check symptoms <i class="fas fa-arrow-right"></i></div>
+    </a>
+    <a href="{{ url_for('medix_portal.mental_wellness') }}" class="feat-card" data-c="amber">
+      <div class="fc-icon fc-amber"><i class="fas fa-brain"></i></div>
+      <div class="fc-title">Mental Wellness</div>
+      <div class="fc-desc">Mood tracking &amp; stress analysis</div>
+      <div class="fc-cta">Check in <i class="fas fa-arrow-right"></i></div>
+    </a>
+    <a href="{{ url_for('medix_portal.health_analytics') }}" class="feat-card" data-c="green">
+      <div class="fc-icon fc-green"><i class="fas fa-chart-line"></i></div>
+      <div class="fc-title">Health Analytics</div>
+      <div class="fc-desc">Trends, insights &amp; predictions</div>
+      <div class="fc-cta">View analytics <i class="fas fa-arrow-right"></i></div>
+    </a>
+    <a href="{{ url_for('medix_portal.bmi_fitness') }}" class="feat-card" data-c="blue">
+      <div class="fc-icon fc-blue"><i class="fas fa-heartbeat"></i></div>
+      <div class="fc-title">BMI &amp; Fitness</div>
+      <div class="fc-desc">Body metrics &amp; caloric analysis</div>
+      <div class="fc-cta">Calculate <i class="fas fa-arrow-right"></i></div>
+    </a>
+    <a href="{{ url_for('medix_portal.medicine_recommendation') }}" class="feat-card" data-c="purple">
+      <div class="fc-icon fc-purple"><i class="fas fa-pills"></i></div>
+      <div class="fc-title">Medicine AI</div>
+      <div class="fc-desc">Evidence-based medication guidance</div>
+      <div class="fc-cta">Get advice <i class="fas fa-arrow-right"></i></div>
+    </a>
+    <a href="{{ url_for('medix_portal.medical_reports') }}" class="feat-card" data-c="cyan">
+      <div class="fc-icon fc-cyan"><i class="fas fa-file-medical-alt"></i></div>
+      <div class="fc-title">Medical Reports</div>
+      <div class="fc-desc">AI-generated PDF health reports</div>
+      <div class="fc-cta">View reports <i class="fas fa-arrow-right"></i></div>
+    </a>
+    <a href="{{ url_for('medix_portal.hospital_locator') }}" class="feat-card" data-c="green">
+      <div class="fc-icon fc-green"><i class="fas fa-hospital"></i></div>
+      <div class="fc-title">Hospital Locator</div>
+      <div class="fc-desc">Find nearby hospitals &amp; clinics</div>
+      <div class="fc-cta">Find now <i class="fas fa-arrow-right"></i></div>
+    </a>
+    <a href="{{ url_for('medix_portal.voice_assistant') }}" class="feat-card" data-c="amber">
+      <div class="fc-icon fc-amber"><i class="fas fa-microphone"></i></div>
+      <div class="fc-title">Voice Assistant</div>
+      <div class="fc-desc">Hands-free health interaction</div>
+      <div class="fc-cta">Activate <i class="fas fa-arrow-right"></i></div>
+    </a>
+    <a href="{{ url_for('medix_portal.emergency') }}" class="feat-card" data-c="red" style="border-color:var(--color-danger-border)">
+      <div class="fc-icon fc-red"><i class="fas fa-exclamation-triangle"></i></div>
+      <div class="fc-title">Emergency AI</div>
+      <div class="fc-desc">Critical response &amp; SOS alerts</div>
+      <div class="fc-cta" style="color:#FB7185">Activate SOS <i class="fas fa-arrow-right"></i></div>
+    </a>
+    <a href="{{ url_for('medix_portal.health_timeline') }}" class="feat-card" data-c="pink">
+      <div class="fc-icon fc-pink"><i class="fas fa-history"></i></div>
+      <div class="fc-title">Health Timeline</div>
+      <div class="fc-desc">Your complete health history</div>
+      <div class="fc-cta">View history <i class="fas fa-arrow-right"></i></div>
+    </a>
+  </div>
+</div>
+
+<!-- ── HEALTH PROFILE ─────────────────────────────────────────────────── -->
+<div class="card card-p animate-on-scroll">
+  <div class="card-head">
+    <div class="card-title"><i class="fas fa-user-circle"></i> Health Profile</div>
+    <a href="{{ url_for('medix_portal.settings') }}" class="btn btn-ghost btn-sm">
+      <i class="fas fa-edit"></i> Edit
+    </a>
+  </div>
+  <div class="profile-grid">
+    <div class="profile-stat"><div class="ps-label">Age</div><div class="ps-val">{{ profile.age if profile and profile.age else '—' }}</div></div>
+    <div class="profile-stat"><div class="ps-label">Gender</div><div class="ps-val">{{ profile.gender if profile and profile.gender else '—' }}</div></div>
+    <div class="profile-stat"><div class="ps-label">Height</div><div class="ps-val">{{ profile.height_cm if profile and profile.height_cm else '—' }}<span> cm</span></div></div>
+    <div class="profile-stat"><div class="ps-label">Weight</div><div class="ps-val">{{ profile.weight_kg if profile and profile.weight_kg else '—' }}<span> kg</span></div></div>
+    <div class="profile-stat"><div class="ps-label">Blood Type</div><div class="ps-val">{{ profile.blood_type if profile and profile.blood_type else '—' }}</div></div>
+    <div class="profile-stat"><div class="ps-label">Allergies</div><div class="ps-val" style="font-size:13px">{{ profile.allergies if profile and profile.allergies else 'None' }}</div></div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+/* ── Chart defaults ─────────────────────────────────────────────────── */
+Chart.defaults.color       = '#5E5874';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.04)';
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size   = 11;
+Chart.defaults.plugins.legend.display = false;
+Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(13,11,20,0.96)';
+Chart.defaults.plugins.tooltip.borderColor     = 'rgba(124,58,237,0.25)';
+Chart.defaults.plugins.tooltip.borderWidth     = 1;
+Chart.defaults.plugins.tooltip.padding         = 10;
+Chart.defaults.plugins.tooltip.titleColor      = '#F0EBF8';
+Chart.defaults.plugins.tooltip.bodyColor       = '#A097B8';
+Chart.defaults.plugins.tooltip.cornerRadius    = 8;
+
+/* ── Vitals Trend ───────────────────────────────────────────────────── */
+let trendChart = null;
+const labels7  = ['Mon','Tue','Wed','Thu','Fri','Sat','Today'];
+const labels30 = Array.from({length:30},(_,i)=>`D${i+1}`);
+
+function buildTrend(days) {
+  const ctx = document.getElementById('vitalsTrendChart');
+  if (!ctx) return;
+  if (trendChart) trendChart.destroy();
+  const labels = days === 7 ? labels7 : labels30;
+  const hrData   = days === 7 ? [70,74,71,73,76,72,72] : Array.from({length:30},()=>68+Math.random()*12|0);
+  const spo2Data = days === 7 ? [97,98,98,97,99,98,98] : Array.from({length:30},()=>96+Math.random()*3|0);
+  trendChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label:'Heart Rate', data:hrData, borderColor:'#A78BFA', backgroundColor:'rgba(124,58,237,0.06)', borderWidth:2, tension:0.4, fill:true, pointRadius:3, pointHoverRadius:5, pointBackgroundColor:'#A78BFA' },
+        { label:'SpO₂', data:spo2Data, borderColor:'#5EEAD4', backgroundColor:'rgba(45,212,191,0.05)', borderWidth:2, tension:0.4, fill:true, pointRadius:3, pointHoverRadius:5, pointBackgroundColor:'#5EEAD4' }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins: {
+        legend: { display:true, position:'top', align:'end', labels:{ usePointStyle:true, pointStyleWidth:8, boxHeight:2, padding:14, font:{size:11}, color:'#A097B8' } },
+        tooltip: { mode:'index', intersect:false }
+      },
+      scales: {
+        x: { grid:{display:false}, ticks:{font:{size:10}} },
+        y: { grid:{color:'rgba(255,255,255,0.04)'}, ticks:{font:{size:10}}, min:60, max:105 }
+      },
+      animation: { duration:600, easing:'easeInOutQuart' }
+    }
+  });
+}
+
+document.querySelectorAll('.chart-period').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.chart-period').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    buildTrend(parseInt(this.dataset.period));
+  });
+});
+
+/* ── Wellness Radar ─────────────────────────────────────────────────── */
+function buildRadar() {
+  const ctx = document.getElementById('wellnessRadar');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type:'radar',
+    data: {
+      labels:['Cardio','Sleep','Nutrition','Mental','Activity','Hydration'],
+      datasets:[{ data:[82,75,70,87,65,80], borderColor:'#7C3AED', backgroundColor:'rgba(124,58,237,0.12)', borderWidth:2, pointBackgroundColor:'#A78BFA', pointRadius:3 }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      scales: { r:{ min:0, max:100, ticks:{display:false}, grid:{color:'rgba(255,255,255,0.06)'}, angleLines:{color:'rgba(255,255,255,0.05)'}, pointLabels:{font:{size:10},color:'#A097B8'} } },
+      animation:{duration:700}
+    }
+  });
+}
+
+/* ── Greeting ───────────────────────────────────────────────────────── */
+(function(){
+  const h = new Date().getHours();
+  const el = document.getElementById('timeGreeting');
+  if (el) el.textContent = h<12?'morning':h<17?'afternoon':'evening';
+})();
+
+/* ── Live vitals polling ────────────────────────────────────────────── */
+function refreshVitals() {
+  fetch('/pulse/realtime/metrics').then(r=>r.json()).then(data=>{
+    const set = (id,val) => { const el=document.getElementById(id); if(el&&val) el.textContent=val; };
+    set('heartRateVal', data.heart_rate);
+    set('spo2Val', data.oxygen_saturation);
+    set('tempVal', data.temperature);
+    if (data.blood_pressure) set('bpVal', `${data.blood_pressure.systolic}/${data.blood_pressure.diastolic}`);
+  }).catch(()=>{});
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildTrend(7);
+  buildRadar();
+  refreshVitals();
+  setInterval(refreshVitals, 15000);
+});
+</script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

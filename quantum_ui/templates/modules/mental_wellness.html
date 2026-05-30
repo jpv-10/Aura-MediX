@@ -1,0 +1,127 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Mental Wellness — Aura MediX{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title"><span>Mental</span> Wellness</h1>
+    <p class="page-subtitle">Mood tracking, stress analysis and personalized mental health support</p>
+  </div>
+</div>
+
+<div class="module-layout">
+  <div class="panel-card">
+    <div class="panel-header"><i class="fas fa-brain"></i> Wellness Check-In</div>
+
+    <div class="form-group">
+      <label class="form-label">How are you feeling today?</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px" id="moodBtns">
+        {% for mood, emoji in [('Great','😄'),('Good','🙂'),('Okay','😐'),('Low','😔'),('Anxious','😰'),('Stressed','😤')] %}
+        <button class="mood-opt-btn" data-mood="{{ mood }}" style="padding:8px 16px;border-radius:var(--r-full);border:1px solid var(--color-border);background:rgba(255,255,255,0.03);color:var(--color-text-secondary);cursor:pointer;font-size:13px;transition:var(--t)">{{ emoji }} {{ mood }}</button>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% for label, id, low, high in [('Stress Level','stress','Calm','Very Stressed'),('Anxiety Level','anxiety','Relaxed','Very Anxious'),('Energy Level','energy','Exhausted','Energized'),('Sleep Quality','sleep','Poor','Excellent')] %}
+    <div class="form-group">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <label class="form-label" style="margin:0">{{ label }}</label>
+        <span id="{{ id }}Val" style="font-family:var(--f-head);font-size:16px;font-weight:700;color:#A78BFA">5</span>
+      </div>
+      <input type="range" id="{{ id }}Slider" min="1" max="10" value="5" style="width:100%;height:4px;border-radius:2px;background:rgba(255,255,255,0.08);outline:none;cursor:pointer;accent-color:#7C3AED" oninput="document.getElementById('{{ id }}Val').textContent=this.value" />
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-muted);margin-top:4px"><span>{{ low }}</span><span>{{ high }}</span></div>
+    </div>
+    {% endfor %}
+
+    <div class="form-group">
+      <label class="form-label">Journal entry (optional)</label>
+      <textarea class="nexus-input nexus-textarea" id="journalEntry" placeholder="How has your day been? What's on your mind?" style="min-height:100px"></textarea>
+    </div>
+
+    <button class="btn btn-primary" id="assessBtn" style="width:100%;justify-content:center;height:44px">
+      <i class="fas fa-brain"></i> Get Wellness Assessment
+    </button>
+  </div>
+
+  <div class="panel-card" id="wellnessResultPanel">
+    <div class="panel-header"><i class="fas fa-chart-pie"></i> Wellness Analysis</div>
+    <div id="wellnessIdle">
+      <div style="text-align:center;padding:32px 0">
+        <div style="font-size:48px;opacity:0.3;margin-bottom:16px">🧠</div>
+        <p style="font-size:14px;color:var(--color-text-muted)">Complete the check-in to receive your personalized wellness assessment.</p>
+      </div>
+    </div>
+    <div id="wellnessResult" class="hidden">
+      <div style="margin-bottom:20px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#A78BFA;margin-bottom:12px">Wellness Breakdown</div>
+        {% for label, id, color in [('Stress','stress','#FB7185'),('Anxiety','anxiety','#F472B6'),('Energy','energy','#34D399'),('Sleep','sleep','#A78BFA')] %}
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+          <span style="font-size:12px;color:var(--color-text-secondary);width:64px;flex-shrink:0">{{ label }}</span>
+          <div style="flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden">
+            <div id="{{ id }}Bar" style="height:100%;border-radius:3px;background:{{ color }};width:50%;transition:width 0.8s ease"></div>
+          </div>
+          <span id="{{ id }}BarVal" style="font-size:12px;color:var(--color-text-muted);width:24px;text-align:right">5</span>
+        </div>
+        {% endfor %}
+      </div>
+      <div id="wellnessInsights" style="font-size:13px;color:var(--color-text-secondary);line-height:1.7;padding:14px;background:rgba(124,58,237,0.06);border:1px solid var(--color-primary-border);border-radius:var(--r-md)"></div>
+      <div id="crisisBox" class="hidden" style="margin-top:16px;padding:14px;background:var(--color-danger-dim);border:1px solid var(--color-danger-border);border-radius:var(--r-md)">
+        <div style="font-size:13px;font-weight:700;color:#FB7185;margin-bottom:8px"><i class="fas fa-heart"></i> You're not alone</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px">If you're struggling, please reach out for support.</div>
+        <a href="tel:1800-599-0019" class="btn btn-danger btn-sm"><i class="fas fa-phone"></i> Mental Health Helpline</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll('.mood-opt-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.mood-opt-btn').forEach(b => { b.style.background='rgba(255,255,255,0.03)'; b.style.borderColor='var(--color-border)'; b.style.color='var(--color-text-secondary)'; });
+    this.style.background='var(--color-primary-dim)'; this.style.borderColor='var(--color-primary-border)'; this.style.color='#A78BFA';
+  });
+});
+
+document.getElementById('assessBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('assessBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Analyzing…';
+  const stress  = parseInt(document.getElementById('stressSlider').value);
+  const anxiety = parseInt(document.getElementById('anxietySlider').value);
+  const energy  = parseInt(document.getElementById('energySlider').value);
+  const sleep   = parseInt(document.getElementById('sleepSlider').value);
+  const mood    = document.querySelector('.mood-opt-btn[style*="primary-dim"]')?.dataset.mood || 'Okay';
+
+  try {
+    const res = await fetch('/ai/mental-health-assess', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ stress, anxiety, energy, sleep, mood, journal: document.getElementById('journalEntry').value })
+    });
+    const data = await res.json();
+    document.getElementById('wellnessIdle').classList.add('hidden');
+    document.getElementById('wellnessResult').classList.remove('hidden');
+    ['stress','anxiety','energy','sleep'].forEach(k => {
+      const val = k==='stress'?stress:k==='anxiety'?anxiety:k==='energy'?energy:sleep;
+      document.getElementById(k+'Bar').style.width = (val*10)+'%';
+      document.getElementById(k+'BarVal').textContent = val;
+    });
+    document.getElementById('wellnessInsights').innerHTML = data.insights || 'Your wellness profile looks balanced. Keep maintaining healthy habits and regular check-ins.';
+    if (stress >= 8 || anxiety >= 8) document.getElementById('crisisBox').classList.remove('hidden');
+    showToast('Wellness assessment complete', 'success');
+  } catch(e) {
+    // Fallback display
+    document.getElementById('wellnessIdle').classList.add('hidden');
+    document.getElementById('wellnessResult').classList.remove('hidden');
+    ['stress','anxiety','energy','sleep'].forEach((k,i) => {
+      const val = [stress,anxiety,energy,sleep][i];
+      document.getElementById(k+'Bar').style.width=(val*10)+'%';
+      document.getElementById(k+'BarVal').textContent=val;
+    });
+    document.getElementById('wellnessInsights').textContent = 'Based on your inputs, focus on stress reduction techniques like deep breathing, regular exercise, and adequate sleep. Consider speaking with a mental health professional if symptoms persist.';
+  } finally {
+    btn.disabled=false; btn.innerHTML='<i class="fas fa-brain"></i> Get Wellness Assessment';
+  }
+});
+</script>
+{% endblock %}

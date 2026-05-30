@@ -1,0 +1,394 @@
+{% extends "dashboard_base.html" %}
+{% block title %}BMI &amp; Fitness — Aura MediX{% endblock %}
+
+{% block head %}
+{# ── Fonts: match design-system.css exactly ── #}
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,600,500,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   BMI & FITNESS — Module Styles
+   All tokens reference design-system.css variables.
+   Layout mirrors disease_detection.html (module-layout / panel-card).
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Input panel ── */
+.bmi-input-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 18px;
+  align-items: end;
+}
+
+/* ── Form group (matches disease_detection .form-group) ── */
+.bmi-form-group { display: flex; flex-direction: column; gap: 7px; }
+
+.bmi-form-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #5E5874);
+}
+
+/* ── Input & select (matches .nexus-input from disease_detection) ── */
+.bmi-nexus-input {
+  background: rgba(124,58,237,0.05);
+  border: 1px solid var(--color-border, rgba(255,255,255,0.06));
+  border-radius: 10px;
+  padding: 10px 13px;
+  color: var(--color-text-primary, #F0EBF8);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+.bmi-nexus-input:focus {
+  outline: none;
+  border-color: var(--color-primary, #7C3AED);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+}
+.bmi-nexus-input option { background: #1A1627; }
+
+/* ── Calculate button (matches .btn.btn-primary) ── */
+.btn-bmi-calculate {
+  width: 100%;
+  padding: 11px 16px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #7C3AED 0%, #9333EA 100%);
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13.5px;
+  font-family: inherit;
+  letter-spacing: 0.02em;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 20px rgba(124,58,237,0.30);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-bmi-calculate:hover  { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(124,58,237,0.45); }
+.btn-bmi-calculate:active { transform: translateY(0); }
+.btn-bmi-calculate:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+/* ── BMI result reveal panel ── */
+.bmi-result-panel {
+  display: none;
+}
+.bmi-result-panel.visible {
+  display: block;
+  animation: bmi-fade-up 0.45s ease-out;
+}
+
+@keyframes bmi-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Score box + gauge row ── */
+.bmi-gauge-row {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.bmi-score-box {
+  background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(147,51,234,0.08));
+  border: 1px solid rgba(124,58,237,0.25);
+  border-radius: 14px;
+  padding: 20px 28px;
+  text-align: center;
+  min-width: 140px;
+  flex-shrink: 0;
+}
+.bmi-number {
+  font-family: 'Satoshi', 'Inter', sans-serif;
+  font-size: 46px;
+  font-weight: 700;
+  color: var(--color-primary, #7C3AED);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.bmi-label-small {
+  font-size: 11px;
+  color: var(--color-text-muted, #5E5874);
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.bmi-gauge { flex: 1; min-width: 220px; }
+.gauge-track {
+  height: 10px;
+  border-radius: 10px;
+  position: relative;
+  overflow: visible;
+  background: linear-gradient(90deg, #60A5FA 0%, #34D399 25%, #FBBF24 55%, #F87171 100%);
+}
+.gauge-marker {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--color-primary, #7C3AED);
+  box-shadow: 0 0 14px rgba(124,58,237,0.6);
+  position: absolute; top: 50%; transform: translate(-50%,-50%);
+  transition: left 1s cubic-bezier(0.34,1.56,0.64,1);
+}
+.gauge-labels {
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: var(--color-text-muted, #5E5874);
+  margin-top: 10px; line-height: 1.4;
+}
+
+/* ── Category pill ── */
+.bmi-category-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 14px; border-radius: 20px;
+  font-weight: 700; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin-left: auto;
+}
+
+/* ── Default stat cards (pre-calculate idle state) ── */
+.bmi-idle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 4px;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.2); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(124,58,237,0.35); }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .bmi-input-grid { grid-template-columns: 1fr 1fr; }
+  .bmi-gauge-row  { flex-direction: column; align-items: stretch; }
+  .bmi-score-box  { width: 100%; }
+}
+@media (max-width: 480px) {
+  .bmi-input-grid { grid-template-columns: 1fr; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+{# ── Page header — identical structure to disease_detection ── #}
+<div class="page-header">
+  <div>
+    <h1 class="page-title"><span>BMI</span> &amp; Fitness</h1>
+    <p class="page-subtitle">Calculate your Body Mass Index, calorie targets &amp; personalised fitness plan</p>
+  </div>
+  <span class="badge badge-purple"><i class="fas fa-heartbeat" style="font-size:9px"></i> Health Calculator</span>
+</div>
+
+{# ── Module layout — same two-column structure as disease_detection ── #}
+<div class="module-layout">
+
+  {# ── LEFT: Input panel ── #}
+  <div class="panel-card">
+    <div class="panel-header"><i class="fas fa-sliders-h"></i> Enter Your Measurements</div>
+
+    <div class="bmi-input-grid" style="margin-bottom:20px">
+
+      <div class="bmi-form-group">
+        <label class="bmi-form-label">Height</label>
+        <input type="number" class="bmi-nexus-input" id="heightInput"
+               placeholder="e.g. 170" min="50" max="300" value="170">
+      </div>
+
+      <div class="bmi-form-group">
+        <label class="bmi-form-label">Height Unit</label>
+        <select class="bmi-nexus-input" id="heightUnit">
+          <option value="cm">Centimetres (cm)</option>
+          <option value="ft">Feet &amp; Inches</option>
+        </select>
+      </div>
+
+      <div class="bmi-form-group">
+        <label class="bmi-form-label">Weight</label>
+        <input type="number" class="bmi-nexus-input" id="weightInput"
+               placeholder="e.g. 65" min="1" max="500" value="65">
+      </div>
+
+      <div class="bmi-form-group">
+        <label class="bmi-form-label">Weight Unit</label>
+        <select class="bmi-nexus-input" id="weightUnit">
+          <option value="kg">Kilograms (kg)</option>
+          <option value="lbs">Pounds (lbs)</option>
+        </select>
+      </div>
+
+      <div class="bmi-form-group">
+        <label class="bmi-form-label">Age</label>
+        <input type="number" class="bmi-nexus-input" id="ageInput"
+               placeholder="Age" min="1" max="120" value="28">
+      </div>
+
+      <div class="bmi-form-group">
+        <label class="bmi-form-label">Biological Sex</label>
+        <select class="bmi-nexus-input" id="sexInput">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+
+      <div class="bmi-form-group" style="grid-column: 1 / -1">
+        <label class="bmi-form-label">Activity Level</label>
+        <select class="bmi-nexus-input" id="activityInput">
+          <option value="1.2">Sedentary (desk job)</option>
+          <option value="1.375">Light active (1–3 days/wk)</option>
+          <option value="1.55" selected>Moderately active (3–5 days/wk)</option>
+          <option value="1.725">Very active (6–7 days/wk)</option>
+          <option value="1.9">Extremely active (athlete/physical job)</option>
+        </select>
+      </div>
+
+    </div>
+
+    <button class="btn-bmi-calculate" id="calculateBtn">
+      <i class="fas fa-calculator"></i> Calculate BMI
+    </button>
+
+    {# ── Quick info strip below button ── #}
+    <div style="margin-top:16px;padding:12px 14px;background:rgba(255,255,255,0.02);border:1px solid var(--color-border);border-radius:10px;font-size:12px;color:var(--color-text-muted);line-height:1.6">
+      <i class="fas fa-info-circle" style="color:var(--color-primary)"></i>
+      <strong style="color:var(--color-text-secondary)">Note:</strong>
+      BMI is a screening tool only. Consult a qualified healthcare professional for a personalised health assessment.
+    </div>
+  </div>
+
+  {# ── RIGHT: Results panel ── #}
+  <div class="panel-card" id="bmiResultPanel">
+    <div class="panel-header"><i class="fas fa-chart-bar"></i> Your Results</div>
+
+    {# Idle state — mirrors disease_detection resultIdle #}
+    <div class="result-idle" id="bmiResultIdle">
+      <div style="font-size:48px;opacity:0.3;margin-bottom:16px">⚖️</div>
+      <p style="font-size:14px;color:var(--color-text-muted);line-height:1.6">
+        Enter your measurements and click <strong style="color:var(--color-text-secondary)">Calculate BMI</strong> to get your personalised health analysis.
+      </p>
+    </div>
+
+    {# Result content — hidden until JS populates + reveals #}
+    <div id="bmiResultContent" class="hidden">
+      {# ── BMI number + gauge ── #}
+      <div style="text-align:center;margin-bottom:20px">
+        <div class="bmi-number" id="bmiDisplay" style="font-size:56px;color:#7C3AED;letter-spacing:-0.03em;line-height:1">—</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.35);margin-top:4px">Body Mass Index</div>
+        <div id="categoryPill" class="bmi-category-pill" style="display:none;margin:10px auto 0;width:fit-content"></div>
+      </div>
+
+      <div class="bmi-gauge-row">
+        <div class="bmi-gauge" style="flex:1">
+          <div class="gauge-track">
+            <div class="gauge-marker" id="gaugeMarker" style="left:0%"></div>
+          </div>
+          <div class="gauge-labels">
+            <span>Underweight<br>&lt;18.5</span>
+            <span>Normal<br>18.5–24.9</span>
+            <span>Overweight<br>25–29.9</span>
+            <span>Obese<br>&gt;30</span>
+          </div>
+        </div>
+      </div>
+
+      {# Result cards inserted by JS #}
+      <div id="bmiResultCards"></div>
+    </div>
+  </div>
+
+</div>{# end .module-layout #}
+
+{# ── Idle dashboard cards — shown before first calculation ── #}
+<div class="bmi-idle-grid" id="idleCards">
+
+  <div class="panel-card">
+    <div class="panel-header"><i class="fas fa-tint"></i> Hydration Status</div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 10px;background:rgba(255,255,255,0.02);border-radius:9px;margin:6px 0">
+      <span style="font-size:12.5px;color:rgba(255,255,255,0.38)">Water Intake</span>
+      <span style="font-size:14px;font-weight:600;color:#60A5FA">6 <span style="font-size:10px;color:rgba(255,255,255,0.28)">glasses</span></span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 10px;background:rgba(255,255,255,0.02);border-radius:9px;margin:6px 0">
+      <span style="font-size:12.5px;color:rgba(255,255,255,0.38)">Daily Target</span>
+      <span style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.8)">8 <span style="font-size:10px;color:rgba(255,255,255,0.28)">glasses</span></span>
+    </div>
+    <div style="margin:14px 0">
+      <div style="display:flex;justify-content:space-between;font-size:11.5px;color:rgba(255,255,255,0.35);margin-bottom:7px">
+        <span>Hydration Level</span><span id="hydrationPct">75%</span>
+      </div>
+      <div style="width:100%;height:6px;background:rgba(255,255,255,0.06);border-radius:10px;overflow:hidden">
+        <div id="hydrationBar" style="height:100%;width:75%;background:linear-gradient(90deg,#60A5FA,#2DD4BF);border-radius:10px;transition:width 0.6s ease"></div>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="window.logWater()">
+      <i class="fas fa-tint"></i> Log Water
+    </button>
+  </div>
+
+  <div class="panel-card">
+    <div class="panel-header"><i class="fas fa-running"></i> Today's Activity</div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 10px;background:rgba(255,255,255,0.02);border-radius:9px;margin:6px 0">
+      <span style="font-size:12.5px;color:rgba(255,255,255,0.38)">Steps</span>
+      <span style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.85)">7,234</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 10px;background:rgba(255,255,255,0.02);border-radius:9px;margin:6px 0">
+      <span style="font-size:12.5px;color:rgba(255,255,255,0.38)">Active Time</span>
+      <span style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.85)">45 <span style="font-size:10px;color:rgba(255,255,255,0.28)">min</span></span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 10px;background:rgba(255,255,255,0.02);border-radius:9px;margin:6px 0">
+      <span style="font-size:12.5px;color:rgba(255,255,255,0.38)">Distance</span>
+      <span style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.85)">5.2 <span style="font-size:10px;color:rgba(255,255,255,0.28)">km</span></span>
+    </div>
+    <div style="margin:14px 0">
+      <div style="display:flex;justify-content:space-between;font-size:11.5px;color:rgba(255,255,255,0.35);margin-bottom:7px">
+        <span>Steps Goal (10,000)</span><span>72%</span>
+      </div>
+      <div style="width:100%;height:6px;background:rgba(255,255,255,0.06);border-radius:10px;overflow:hidden">
+        <div style="height:100%;width:72%;background:linear-gradient(90deg,#A78BFA,#7C3AED);border-radius:10px"></div>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="window.showToast('Activity details coming soon','info')">
+      <i class="fas fa-chart-line"></i> View Details
+    </button>
+  </div>
+
+  <div class="panel-card">
+    <div class="panel-header"><i class="fas fa-lightbulb"></i> Daily Health Tips</div>
+    <div style="display:flex;flex-direction:column;gap:2px">
+      <div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;color:rgba(255,255,255,0.6);line-height:1.5">
+        <span style="color:#A78BFA;font-weight:700;flex-shrink:0">›</span>
+        <span>Sleep 7–9 hours nightly for optimal recovery and hormone regulation</span>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;color:rgba(255,255,255,0.6);line-height:1.5">
+        <span style="color:#A78BFA;font-weight:700;flex-shrink:0">›</span>
+        <span>Include 5 servings of fruits &amp; vegetables every day</span>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;color:rgba(255,255,255,0.6);line-height:1.5">
+        <span style="color:#A78BFA;font-weight:700;flex-shrink:0">›</span>
+        <span>Reduce refined sugar and avoid ultra-processed foods</span>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;font-size:13px;color:rgba(255,255,255,0.6);line-height:1.5">
+        <span style="color:#A78BFA;font-weight:700;flex-shrink:0">›</span>
+        <span>Practice 10 min of mindfulness daily for stress management</span>
+      </div>
+    </div>
+    <a href="/modules/ai-doctor" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:14px;display:flex;align-items:center;gap:8px">
+      <i class="fas fa-robot"></i> Get Personalised Plan
+    </a>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/bmi_fitness.js') }}"></script>
+{% endblock %}

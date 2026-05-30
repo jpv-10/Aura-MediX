@@ -1,0 +1,104 @@
+{% extends "dashboard_base.html" %}
+{% block title %}AURA AI Doctor — Aura MediX{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ai_doctor.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title"><span>AURA</span> AI Doctor</h1>
+    <p class="page-subtitle">24/7 AI health consultation powered by advanced language models</p>
+  </div>
+  <span class="badge badge-green"><i class="fas fa-circle" style="font-size:8px"></i> Online</span>
+</div>
+
+<div class="chat-wrap">
+  <div class="chat-layout">
+    <!-- Sidebar: conversation history -->
+    <div class="chat-side">
+      <button class="new-sess-btn" id="newChatBtn">
+        <i class="fas fa-plus"></i> New conversation
+      </button>
+      <div class="sess-label">Recent</div>
+      <div class="sess-item active">
+        <i class="fas fa-comment-medical"></i>
+        <div>
+          <div class="sess-title">General health check</div>
+          <div class="sess-date">Today</div>
+        </div>
+      </div>
+      <div class="sess-item">
+        <i class="fas fa-comment-medical"></i>
+        <div>
+          <div class="sess-title">Headache symptoms</div>
+          <div class="sess-date">Yesterday</div>
+        </div>
+      </div>
+      <div class="sess-item">
+        <i class="fas fa-comment-medical"></i>
+        <div>
+          <div class="sess-title">Sleep quality advice</div>
+          <div class="sess-date">3 days ago</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main chat -->
+    <div class="chat-main">
+      <div class="chat-head">
+        <div class="ai-info">
+          <div class="ai-orb-sm">🤖</div>
+          <div>
+            <div class="ai-name">AURA — AI Health Assistant</div>
+            <div class="ai-status"><span class="ai-status-dot"></span> Ready to help</div>
+          </div>
+        </div>
+        <div class="chat-head-btns">
+          <button class="chat-btn" title="Clear chat" id="clearChatBtn"><i class="fas fa-trash-alt"></i></button>
+          <button class="chat-btn" title="Export chat"><i class="fas fa-download"></i></button>
+        </div>
+      </div>
+
+      <div class="chat-msgs" id="chatMessages">
+        <!-- Welcome message -->
+        <div class="msg assistant">
+          <div class="msg-av ai">🤖</div>
+          <div class="msg-bubble">
+            <div class="msg-content">
+              <p>Hello! I'm <strong>AURA</strong>, your AI health assistant. I'm here to help you with health questions, symptom analysis, wellness advice, and more.</p>
+              <p>Please remember: I provide health information and guidance, but I'm not a substitute for professional medical care. For emergencies, call 112 immediately.</p>
+              <p>How can I help you today?</p>
+            </div>
+            <div class="msg-time">Just now</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick prompts -->
+      <div class="quick-prompts">
+        <button class="qp-btn" data-prompt="What are common symptoms of diabetes?">Diabetes symptoms</button>
+        <button class="qp-btn" data-prompt="How can I improve my sleep quality?">Better sleep</button>
+        <button class="qp-btn" data-prompt="What foods are good for heart health?">Heart health diet</button>
+        <button class="qp-btn" data-prompt="How do I manage stress effectively?">Stress management</button>
+      </div>
+
+      <!-- Input area -->
+      <div class="chat-input-area">
+        <div class="chat-input-wrap">
+          <textarea class="chat-input" id="chatInput" placeholder="Ask AURA anything about your health…" rows="1"></textarea>
+          <div class="chat-input-btns">
+            <button class="voice-btn" id="voiceBtn" title="Voice input"><i class="fas fa-microphone"></i></button>
+            <button class="send-btn" id="sendBtn" title="Send (Ctrl+Enter)"><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+        <div class="chat-disc">AURA provides health information only — not medical diagnosis. Always consult a doctor for medical decisions.</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/ai_doctor.js') }}"></script>
+{% endblock %}
